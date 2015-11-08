@@ -1,5 +1,7 @@
 package game;
 
+import game.board.BoardState;
+
 public class GameResult
 {
 		BoardState board;

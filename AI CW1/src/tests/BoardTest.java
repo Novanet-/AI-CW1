@@ -9,10 +9,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.BoardPiece;
-import game.BoardState;
-import game.PiecePosition;
-import game.PieceType;
+import game.board.BoardState;
+import game.piece.Agent;
+import game.piece.Block;
+import game.piece.PiecePosition;
+import game.piece.PieceType;
 import utilities.Pair;
 
 
@@ -24,18 +25,18 @@ public class BoardTest
 	@Before
 	public void setUp() throws Exception
 	{
-		ArrayList<BoardPiece> pieces1 = new ArrayList<BoardPiece>();
-		pieces1.add(new BoardPiece("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,1))));
-		pieces1.add(new BoardPiece("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,1))));
-		pieces1.add(new BoardPiece("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3,1))));
-		pieces1.add(new BoardPiece("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(4,1))));
-		board1 = new BoardState(new Rectangle(8, 8), pieces1);
-		ArrayList<BoardPiece> pieces2 = new ArrayList<BoardPiece>();
-		pieces2.add(new BoardPiece("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,2))));
-		pieces2.add(new BoardPiece("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,2))));
-		pieces2.add(new BoardPiece("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3,2))));
-		pieces2.add(new BoardPiece("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(4,2))));
-		board2 = new BoardState(new Rectangle(8, 8), pieces2);
+		ArrayList<Block> blocks1 = new ArrayList<Block>();
+		blocks1.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(0,0))));
+		blocks1.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,0))));
+		blocks1.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,0))));
+		Agent agent1 = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3,0)));
+		board1 = new BoardState(new Rectangle(8, 8), agent1, blocks1);
+		ArrayList<Block> blocks2 = new ArrayList<Block>();
+		blocks2.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(0,1))));
+		blocks2.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,1))));
+		blocks2.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,1))));
+		Agent agent2 = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3,1)));
+		board1 = new BoardState(new Rectangle(8, 8), agent2, blocks2);
 	}
 
 
