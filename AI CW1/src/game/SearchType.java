@@ -3,5 +3,5 @@ package game;
 
 public enum SearchType
 {
-	DEPTH_FIRST
+	DEPTH_FIRST, BREADTH_FIRST, ITERATIVE_DEEPENING, A_STAR;
 }

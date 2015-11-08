@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class BoardState
 {
-	Rectangle board;
-	ArrayList<BoardPiece> pieces;
+	private Rectangle board;
+	private ArrayList<BoardPiece> pieces;
 	
 	/**
 	 * @param board
@@ -18,8 +18,35 @@ public class BoardState
 		this.board = board;
 		this.pieces = pieces;
 	}
+	
+	public boolean equals(BoardState boardState)
+	{
+		boolean equalBoardState = true;
+		if (!(this.board.equals(boardState.getBoard())))
+		{
+			equalBoardState = false;
+		}
+		if (!(this.getPieces().equals(boardState.getPieces())))
+		{
+			equalBoardState = false;
+		}
+		
+		return equalBoardState;
+	}
 
+	
+	public Rectangle getBoard()
+	{
+		return board;
+	}
 
+	
+	public ArrayList<BoardPiece> getPieces()
+	{
+		return pieces;
+	}
+
+	
 
 
 }
