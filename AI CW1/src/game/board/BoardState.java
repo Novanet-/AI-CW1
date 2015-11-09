@@ -7,6 +7,7 @@ import game.piece.Agent;
 import game.piece.Block;
 import game.piece.BoardPiece;
 import game.piece.PiecePosition;
+import utilities.Pair;
 
 public class BoardState
 {
@@ -55,6 +56,29 @@ public class BoardState
 		return equalBoardState;
 	}
 
+	@Override
+	public String toString()
+	{
+		PiecePosition drawHead = new PiecePosition(new Pair<Integer, Integer>());
+		char tileImage = ' ';
+		for (int x = 0; x > this.getBoard().getWidth(); x++)
+		{
+			for (int y= 0; y > this.getBoard().getHeight(); y++)
+			{
+				drawHead.setPosition(new Pair<Integer, Integer>(x, y));
+				for (Block b: this.getBlocks())
+				{
+					if (drawHead.equals(b.getPosition()))
+					{
+						tileImage = b.getName().charAt(0);
+					}
+				}
+				if (drawHead)
+			}
+		}
+		return null;
+		
+	}
 	
 	public Rectangle getBoard()
 	{

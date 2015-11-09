@@ -14,6 +14,11 @@ public class Pair<L, R>
 	}
 
 
+	public Pair()
+	{
+	}
+
+
 	public L getLeft()
 	{
 		return left;
@@ -24,5 +29,21 @@ public class Pair<L, R>
 	{
 		return right;
 	}
+
+
+	
+	public void setLeft(L left)
+	{
+		this.left = left;
+	}
+
+
+	
+	public void setRight(R right)
+	{
+		this.right = right;
+	}
+	
+	
 
 }

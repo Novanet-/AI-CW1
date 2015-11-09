@@ -9,5 +9,7 @@ public class Block extends BoardPiece
 		super(name, type, position);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 }

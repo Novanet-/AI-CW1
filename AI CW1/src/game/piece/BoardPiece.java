@@ -19,6 +19,25 @@ public class BoardPiece
 		this.type = type;
 		this.position = position;
 	}
+
+	
+	public String getName()
+	{
+		return name;
+	}
+
+	
+	public PieceType getType()
+	{
+		return type;
+	}
+
+	
+	public PiecePosition getPosition()
+	{
+		return position;
+	}
 	
 
+	
 }
