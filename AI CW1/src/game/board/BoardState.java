@@ -23,6 +23,7 @@ public class BoardState
 	{
 		super();
 		this.board = board;
+		this.agent = agent;
 		this.blocks = blocks;
 	}
 	
@@ -60,23 +61,32 @@ public class BoardState
 	public String toString()
 	{
 		PiecePosition drawHead = new PiecePosition(new Pair<Integer, Integer>());
-		char tileImage = ' ';
-		for (int x = 0; x > this.getBoard().getWidth(); x++)
+		StringBuilder boardImage = new StringBuilder();
+		boardImage.append("");
+		char tileImage;
+		for (int x = 0; x < this.getBoard().getWidth(); x++)
 		{
-			for (int y= 0; y > this.getBoard().getHeight(); y++)
+			for (int y= 0; y < this.getBoard().getHeight(); y++)
 			{
+				tileImage = '-';
 				drawHead.setPosition(new Pair<Integer, Integer>(x, y));
 				for (Block b: this.getBlocks())
 				{
-					if (drawHead.equals(b.getPosition()))
+					if ((drawHead.x().equals(b.getPosition().x())) && (drawHead.y().equals(b.getPosition().y())))
 					{
 						tileImage = b.getName().charAt(0);
 					}
 				}
-				if (drawHead)
+				if ((drawHead.x().equals(this.getAgent().getPosition().x())) && (drawHead.y().equals(this.getAgent().getPosition().y())))
+				{
+					tileImage = 'x';
+				}
+				boardImage.append(tileImage);
 			}
+			boardImage.append("\n");
+			
 		}
-		return null;
+		return boardImage.toString();
 		
 	}
 	

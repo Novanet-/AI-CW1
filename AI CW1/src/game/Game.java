@@ -21,7 +21,9 @@ import utilities.Pair;
  */
 public class Game
 {
-	BoardState boardstate;
+
+	BoardState			boardstate;
+	static BoardState	goalState;
 
 
 	/**
@@ -31,37 +33,50 @@ public class Game
 	{
 		Rectangle board = new Rectangle(4, 4);
 		ArrayList<Block> pieces = new ArrayList<Block>();
-		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(0,0))));
-		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,0))));
-		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,0))));
-		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3,0)));
+		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 0))));
+		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 1))));
+		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 2))));
+		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 3)));
 		boardstate = new BoardState(board, agent, pieces);
+
+		Rectangle boardG = new Rectangle(4, 4);
+		ArrayList<Block> piecesG = new ArrayList<Block>();
+		piecesG.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1, 1))));
+		piecesG.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2, 1))));
+		piecesG.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 1))));
+		Agent agentG = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 3)));
+		goalState = new BoardState(boardG, agentG, piecesG);
 	}
-	
-	public Game(Rectangle board, Agent agent,  ArrayList<Block> blocks)
+
+
+	public Game(Rectangle board, Agent agent, ArrayList<Block> blocks)
 	{
 
 		boardstate = new BoardState(board, agent, blocks);
 	}
-	
+
+
 	public GameResult runGame(BoardState initBoardState, BoardState goalState, SearchType search)
 	{
 		GameResult gameResult = null;
 		switch (search)
-        {
+		{
 			case DEPTH_FIRST:
 				return gameResult;
 			default:
 				return gameResult;
-        }
+		}
 	}
-	
+
+
 	public static void main(String[] args)
 	{
-		Game game = new Game();
-		game.runGame(game.getBoardstate(), new BoardState(null, null, null), SearchType.DEPTH_FIRST);
+
+
+		//game.runGame(game.getBoardstate(), new BoardState(null, null, null), SearchType.DEPTH_FIRST);
 	}
-	
+
+
 	public BoardState getBoardstate()
 	{
 		return boardstate;

@@ -28,7 +28,7 @@ public class PiecePosition
 	
 	public void setPosition(Pair<Integer, Integer> position)
 	{
-		// TODO Auto-generated method stub
+		this.position = position;
 		
 	}
 	
