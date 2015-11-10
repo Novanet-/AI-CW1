@@ -2,6 +2,7 @@ package game.board;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Set;
 
 import game.piece.Agent;
 import game.piece.Block;
@@ -104,6 +105,12 @@ public class BoardState
 	public ArrayList<Block> getBlocks()
 	{
 		return blocks;
+	}
+
+	public Set<BoardState> generatePossibleMoves()
+	{
+		BoardState boardStateProbe = (BoardState) this.clone();
+		return null;
 	}
 
 	
