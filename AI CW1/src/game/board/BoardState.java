@@ -109,7 +109,15 @@ public class BoardState
 
 	public Set<BoardState> generatePossibleMoves()
 	{
-		BoardState boardStateProbe = (BoardState) this.clone();
+		try
+		{
+			BoardState boardStateProbe = (BoardState) this.clone();
+			
+		}
+		catch (CloneNotSupportedException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 

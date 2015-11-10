@@ -12,6 +12,7 @@ public class Search
 	public static GameResult depthFirst(BoardState initBoardState)
 	{
 		Tree<BoardState> searchTree = new Tree<BoardState>(initBoardState, null, null);
+		Set<BoardState> possibleMoves = initBoardState.generatePossibleMoves();
 		return null;
 		
 	}
