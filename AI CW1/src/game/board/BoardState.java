@@ -2,6 +2,7 @@ package game.board;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import game.piece.Agent;
@@ -12,10 +13,12 @@ import utilities.Pair;
 
 public class BoardState
 {
-	private Rectangle board;
-	private Agent agent;
-	private ArrayList<Block> blocks;
-	
+
+	private Rectangle			board;
+	private Agent				agent;
+	private ArrayList<Block>	blocks;
+
+
 	/**
 	 * @param board
 	 * @param pieces
@@ -27,18 +30,8 @@ public class BoardState
 		this.agent = agent;
 		this.blocks = blocks;
 	}
-	
-	/*public Set<AgentMove> determineValidAgentMoves()
-	{
-		
-	}*/
-	
-	public boolean isPositionWithinBoard(PiecePosition position)
-	{
-		return false;
-		//return ((position ))
-	}
-	
+
+
 	public boolean equals(BoardState boardState)
 	{
 		boolean equalBoardState = true;
@@ -54,9 +47,10 @@ public class BoardState
 		{
 			equalBoardState = false;
 		}
-		
+
 		return equalBoardState;
 	}
+
 
 	@Override
 	public String toString()
@@ -67,11 +61,11 @@ public class BoardState
 		char tileImage;
 		for (int x = 0; x < this.getBoard().getWidth(); x++)
 		{
-			for (int y= 0; y < this.getBoard().getHeight(); y++)
+			for (int y = 0; y < this.getBoard().getHeight(); y++)
 			{
 				tileImage = '-';
 				drawHead.setPosition(new Pair<Integer, Integer>(x, y));
-				for (Block b: this.getBlocks())
+				for (Block b : this.getBlocks())
 				{
 					if ((drawHead.x().equals(b.getPosition().x())) && (drawHead.y().equals(b.getPosition().y())))
 					{
@@ -85,45 +79,95 @@ public class BoardState
 				boardImage.append(tileImage);
 			}
 			boardImage.append("\n");
-			
+
 		}
 		return boardImage.toString();
-		
+
 	}
-	
+
+
 	public Rectangle getBoard()
 	{
 		return board;
 	}
-	
-	
+
+
 	public Agent getAgent()
 	{
 		return agent;
 	}
+
 
 	public ArrayList<Block> getBlocks()
 	{
 		return blocks;
 	}
 
-	public Set<BoardState> generatePossibleMoves()
+
+	public HashSet<BoardState> generatePossibleMoves()
 	{
-		try
+		HashSet<BoardState> validMoves = new HashSet<>();
+		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(this.getAgent().getPosition().x(), this.getAgent().getPosition().y()));
+		PiecePosition boardStateProbe = this.getAgent().getPosition();
+		HashSet<Pair> moveVectors = new HashSet<>();
+		moveVectors.add(new Pair<Integer, Integer>(-1, 0));
+		moveVectors.add(new Pair<Integer, Integer>(0, 1));
+		moveVectors.add(new Pair<Integer, Integer>(1, 0));
+		moveVectors.add(new Pair<Integer, Integer>(0, -1));
+		for (Pair<Integer, Integer> moveVector : moveVectors)
 		{
-			BoardState boardStateProbe = (BoardState) this.clone();
-			
+			boardStateProbe.setPosition(new Pair<Integer, Integer>(boardStateProbe.x() + moveVector.getLeft(), boardStateProbe.y() + moveVector.getRight()));
+			if (isPieceInBounds(boardStateProbe))
+			{
+				validMoves.add(new BoardState(this.getBoard(), this.getAgent().copy(), new ArrayList<Block>(this.getBlocks())));
+			}
 		}
-		catch (CloneNotSupportedException e)
-		{
-			e.printStackTrace();
-		}
+
 		return null;
 	}
 
-	
 
-	
+	private boolean isPieceInBounds(PiecePosition boardStateProbe)
+	{
+		if ((boardStateProbe.x() >= 0) && (boardStateProbe.x() < this.getBoard().getHeight()))
+		{
+			if ((boardStateProbe.y() >= 0) && (boardStateProbe.y() < this.getBoard().getWidth()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
+
+	public boolean isGoalState()
+	{
+		Block lastBlock = this.getBlocks().get(getBlocks().size() - 1);
+		if (blockOnTable(lastBlock))
+		{
+			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
+			{
+				Block smallerBlock = getBlocks().get(i);
+				if (!(smallerBlock.getPosition().x() == (lastBlock.getPosition().y() - 1)))
+				{
+					return false;
+				}
+				lastBlock = smallerBlock;
+
+			}
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * @param block
+	 * @return
+	 */
+	private boolean blockOnTable(Block lastBlock)
+	{
+		return lastBlock.getPosition().x().equals(this.getBoard().getHeight() - 1);
+	}
 
 }

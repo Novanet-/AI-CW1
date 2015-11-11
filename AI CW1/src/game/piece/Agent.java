@@ -3,7 +3,7 @@
  */
 package game.piece;
 
-
+import utilities.Pair;
 
 public class Agent extends BoardPiece
 {
@@ -17,6 +17,11 @@ public class Agent extends BoardPiece
 	{
 		super(name, type, position);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Agent copy()
+	{
+		return new Agent(this.name, this.type, new PiecePosition(new Pair<Integer, Integer>(this.position.x(), this.position.y())));
 	}
 
 }

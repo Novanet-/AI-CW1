@@ -7,7 +7,7 @@ public class Tree<T>
 
 	private T val;
 	private Tree<T> parent;
-	private Set<Tree<T>> children;
+	private HashSet<Tree<T>> children;
 
 
 	/**
@@ -15,7 +15,7 @@ public class Tree<T>
 	 * @param parent
 	 * @param children
 	 */
-	public Tree(T val, Tree<T> parent, Set<Tree<T>> children)
+	public Tree(T val, Tree<T> parent, HashSet<Tree<T>> children)
 	{
 		super();
 		this.val = val;
@@ -44,7 +44,7 @@ public class Tree<T>
 	}
 
 
-	private void setChildren(Set<Tree<T>> children)
+	private void setChildren(HashSet<Tree<T>> children)
 	{
 		this.children = children;
 	}
