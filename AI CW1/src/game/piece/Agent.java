@@ -23,5 +23,10 @@ public class Agent extends BoardPiece
 	{
 		return new Agent(this.name, this.type, new PiecePosition(new Pair<Integer, Integer>(this.position.x(), this.position.y())));
 	}
+	
+	public String toString()
+	{
+		return new String(name + "," + type.toString() + "," + position.toString());
+	}
 
 }

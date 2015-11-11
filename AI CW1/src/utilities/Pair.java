@@ -44,6 +44,12 @@ public class Pair<L, R>
 		this.right = right;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return new String(left + "," + right);
+	}
+	
 	
 
 }

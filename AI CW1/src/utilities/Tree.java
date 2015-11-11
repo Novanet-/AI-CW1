@@ -1,13 +1,14 @@
 package utilities;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Tree<T>
 {
 
 	private T val;
 	private Tree<T> parent;
-	private HashSet<Tree<T>> children;
+	private ArrayList<Tree<T>> children;
 
 
 	/**
@@ -15,7 +16,7 @@ public class Tree<T>
 	 * @param parent
 	 * @param children
 	 */
-	public Tree(T val, Tree<T> parent, HashSet<Tree<T>> children)
+	public Tree(T val, Tree<T> parent, ArrayList<Tree<T>> children)
 	{
 		super();
 		this.val = val;
@@ -38,13 +39,13 @@ public class Tree<T>
 
 
 	
-	public Set<Tree<T>> getChildren()
+	public ArrayList<Tree<T>> getChildren()
 	{
 		return children;
 	}
 
 
-	private void setChildren(HashSet<Tree<T>> children)
+	private void setChildren(ArrayList<Tree<T>> children)
 	{
 		this.children = children;
 	}

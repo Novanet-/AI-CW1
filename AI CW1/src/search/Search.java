@@ -1,6 +1,8 @@
 package search;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import game.GameResult;
@@ -10,38 +12,54 @@ import utilities.Tree;
 public class Search
 {
 
-	public static GameResult depthFirst(BoardState boardState)
+	public static GameResult depthFirst(BoardState boardState) throws NoSolutionPossibleException
 	{
-		Tree<BoardState> searchTree = new Tree<BoardState>(boardState, null, null);
+		Tree<BoardState> searchTree = new Tree<BoardState>(boardState, null, new ArrayList<Tree<BoardState>>());
+		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
+		int nodeCounter = 1;
 		boolean goalStateFound = false;
-		while (!(goalStateFound))
+		while (!(goalStateFound) || (nodeCounter < 6))
 		{
-			if (boardState.isGoalState())
+			System.out.println(searchTree.getVal());
+			if (searchTree.getVal().isGoalState())
 			{
 				goalStateFound = true;
-				return new GameResult(boardState, 0, 0);
+				return new GameResult(searchTree.getVal(), nodeCounter, 0);
 			}
 			
-			HashSet<BoardState> visitedBoardStates = new HashSet<>();
-			HashSet<BoardState> possibleMoves = boardState.generatePossibleMoves();
-			
+			visitedBoardStates.add(searchTree.getVal());
+
+			ArrayList<BoardState> possibleMoves = searchTree.getVal().generatePossibleMoves();
+
 			for (BoardState bState : possibleMoves)
 			{
 				if (!(visitedBoardStates.contains(bState)))
 				{
-					searchTree.getChildren().add(new Tree<BoardState>(bState, searchTree, children))
+					searchTree.getChildren().add(new Tree<BoardState>(bState, searchTree, new ArrayList<Tree<BoardState>>()));
 				}
 			}
 			
-			
-			searchTree.getChildren().add(e)
-			
-			if (searchTree.getParent() == null && searchTree.getChildren().isEmpty())
+
+			if (searchTree.getChildren().isEmpty())
 			{
-				return null;
+				if (!(searchTree.getParent() == null))
+				{
+					searchTree = searchTree.getParent();
+				}
+				else
+				{
+					throw new NoSolutionPossibleException();
+				}
 			}
-			
+			else
+			{
+				Random rand = new Random();
+				searchTree = searchTree.getChildren().get(rand.nextInt(searchTree.getChildren().size()));
+				nodeCounter++;
+			}
+
 		}
+		return null;
 
 	}
 

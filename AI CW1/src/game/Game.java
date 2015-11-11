@@ -12,6 +12,8 @@ import game.piece.Block;
 import game.piece.Block;
 import game.piece.PiecePosition;
 import game.piece.PieceType;
+import search.NoSolutionPossibleException;
+import search.Search;
 import search.SearchType;
 import utilities.Pair;
 
@@ -56,13 +58,13 @@ public class Game
 	}
 
 
-	public GameResult runGame(BoardState initBoardState, BoardState goalState, SearchType search)
+	public GameResult runGame(BoardState initBoardState, BoardState goalState, SearchType search) throws NoSolutionPossibleException
 	{
 		GameResult gameResult = null;
 		switch (search)
 		{
 			case DEPTH_FIRST:
-				return gameResult;
+				gameResult = Search.depthFirst(initBoardState);
 			default:
 				return gameResult;
 		}
@@ -71,9 +73,16 @@ public class Game
 
 	public static void main(String[] args)
 	{
-
-
-		//game.runGame(game.getBoardstate(), new BoardState(null, null, null), SearchType.DEPTH_FIRST);
+		Game game = new Game();
+		try
+		{
+			//System.out.println(goalState.isGoalState());
+			game.runGame(game.getBoardstate(), Game.goalState , SearchType.DEPTH_FIRST);
+		}
+		catch (NoSolutionPossibleException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 

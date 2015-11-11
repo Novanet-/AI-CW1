@@ -104,26 +104,47 @@ public class BoardState
 	}
 
 
-	public HashSet<BoardState> generatePossibleMoves()
+	public ArrayList<BoardState> generatePossibleMoves()
 	{
-		HashSet<BoardState> validMoves = new HashSet<>();
-		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(this.getAgent().getPosition().x(), this.getAgent().getPosition().y()));
-		PiecePosition boardStateProbe = this.getAgent().getPosition();
-		HashSet<Pair> moveVectors = new HashSet<>();
+		ArrayList<BoardState> validMoves = new ArrayList<BoardState>();
+		BoardState boardStateCopy = this.copy();
+		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(boardStateCopy.getAgent().getPosition().x(), boardStateCopy.getAgent().getPosition().y()));
+		PiecePosition boardStateProbe = boardStateCopy.getAgent().getPosition();
+		ArrayList<Pair<Integer, Integer>> moveVectors = new ArrayList<Pair<Integer, Integer>>();
 		moveVectors.add(new Pair<Integer, Integer>(-1, 0));
 		moveVectors.add(new Pair<Integer, Integer>(0, 1));
 		moveVectors.add(new Pair<Integer, Integer>(1, 0));
 		moveVectors.add(new Pair<Integer, Integer>(0, -1));
 		for (Pair<Integer, Integer> moveVector : moveVectors)
 		{
+			ArrayList<Block> blockProbe = new ArrayList<Block>();
+			for (Block b: boardStateCopy.getBlocks())
+			{
+				blockProbe.add(b.copy());
+			}
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(boardStateProbe.x() + moveVector.getLeft(), boardStateProbe.y() + moveVector.getRight()));
 			if (isPieceInBounds(boardStateProbe))
 			{
-				validMoves.add(new BoardState(this.getBoard(), this.getAgent().copy(), new ArrayList<Block>(this.getBlocks())));
+				for (Block b : blockProbe)
+				{
+					if ((boardStateProbe.x() == b.getPosition().x()) && (boardStateProbe.y() == b.getPosition().y()))
+					{
+						b.getPosition().setX(initAgent.x());
+						b.getPosition().setY(initAgent.y());
+					}
+				}
+				Agent newAgent = boardStateCopy.getAgent().copy();
+				newAgent.getPosition().setPosition(new Pair<Integer, Integer>(boardStateProbe.x(), boardStateProbe.y()));
+				validMoves.add(new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe));
 			}
+			else
+			{
+				boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));
+			}
+			boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));
 		}
 
-		return null;
+		return validMoves;
 	}
 
 
@@ -148,11 +169,14 @@ public class BoardState
 			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
 			{
 				Block smallerBlock = getBlocks().get(i);
-				if (!(smallerBlock.getPosition().x() == (lastBlock.getPosition().y() - 1)))
+				if ((smallerBlock.getPosition().x() == (lastBlock.getPosition().x() - 1)) && (smallerBlock.getPosition().y() == lastBlock.getPosition().y()))
+				{
+					lastBlock = smallerBlock;
+				}
+				else
 				{
 					return false;
 				}
-				lastBlock = smallerBlock;
 
 			}
 			return true;
@@ -167,7 +191,13 @@ public class BoardState
 	 */
 	private boolean blockOnTable(Block lastBlock)
 	{
-		return lastBlock.getPosition().x().equals(this.getBoard().getHeight() - 1);
+		return lastBlock.getPosition().x().equals((int) this.getBoard().getHeight() - 1);
+	}
+
+
+	public BoardState copy()
+	{
+		return new BoardState(new Rectangle(this.getBoard()), this.getAgent().copy(), new ArrayList<Block>(this.getBlocks()));
 	}
 
 }
