@@ -20,7 +20,6 @@ import search.SearchType;
 import utilities.Pair;
 
 /**
- * @author Will
  *
  */
 public class Game
@@ -60,7 +59,16 @@ public class Game
 	}
 
 
-	public GameResult runGame(BoardState initBoardState, BoardState goalState, SearchType search) throws NoSolutionPossibleException
+	/**
+	 * Runs the block board game with an initial board state, and a search type used to calcualte the solution
+	 * 
+	 * @param initBoardState
+	 * @param goalState
+	 * @param search
+	 * @return
+	 * @throws NoSolutionPossibleException
+	 */
+	public GameResult runGame(BoardState initBoardState, SearchType search) throws NoSolutionPossibleException
 	{
 		GameResult gameResult = null;
 		switch (search)
@@ -83,9 +91,9 @@ public class Game
 			int agentAccumulator = 0;
 			for (int i = 0; i < 100; i++)
 			{
-				GameResult result = game.runGame(game.getBoardstate(), Game.goalState, SearchType.DEPTH_FIRST);
-				nodesAccumulator +=  result.getNodesExpanded();
-				agentAccumulator +=  result.getAgentMoves();
+				GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
+				nodesAccumulator += result.getNodesExpanded();
+				agentAccumulator += result.getAgentMoves();
 				BoardState finalState = result.getSolutionPath().elementAt(0);
 				System.out.println("*************************************\n");
 				System.out.println(finalState);
@@ -93,17 +101,21 @@ public class Game
 				System.out.println("*************************************\n");
 			}
 			nodesAccumulator = nodesAccumulator / 100;
-			agentAccumulator = agentAccumulator /100;
+			agentAccumulator = agentAccumulator / 100;
 			System.out.println(" ");
 			System.out.println(nodesAccumulator + " , " + agentAccumulator);
-			
+
 		}
 		catch (NoSolutionPossibleException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
+
+	/**
+	 * @param solutionPath The stack of board states that lead to the solution of the game
+	 */
 	public void printSolutionPath(Stack<BoardState> solutionPath)
 	{
 		while (!(solutionPath.isEmpty()))

@@ -14,29 +14,34 @@ public class Search
 {
 
 	/**
-	 * @param initBoardState The start state of the game
+	 * Performs a depth first search on the given initial board state to calculate the moves the agent can perform to
+	 * make the board reach a goal state
+	 * 
+	 * @param initBoardState
+	 *            The start state of the game
 	 * @return An object containing the solution path, number of nodes expanded, and number of moves to reach solution
-	 * @throws NoSolutionPossibleException If a goal state can't be reached from the start state
+	 * @throws NoSolutionPossibleException
+	 *             If a goal state can't be reached from the start state
 	 */
 	public static GameResult depthFirst(BoardState initBoardState) throws NoSolutionPossibleException
 	{
 		Tree<BoardState> searchTree = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
 		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
-		
+
 		int nodeCounter = 1;
 		boolean goalStateFound = false;
-		
+
 		while (!(goalStateFound))
 		{
 			BoardState currentBoardState = searchTree.getVal();
 			if (currentBoardState.isGoalState())
 			{
 				goalStateFound = true;
-				
+
 				Stack<BoardState> solutionPath = calculateSolutionPath(searchTree);
 				return new GameResult(solutionPath, nodeCounter, solutionPath.size());
 			}
-			
+
 			visitedBoardStates.add(currentBoardState);
 
 			ArrayList<BoardState> possibleMoves = currentBoardState.generatePossibleMoves();
@@ -50,7 +55,6 @@ public class Search
 					nodeCounter++;
 				}
 			}
-			
 
 			if (nextMoves.isEmpty())
 			{
@@ -75,7 +79,8 @@ public class Search
 
 
 	/**
-	 * @param solutionState The final state of a solution
+	 * @param solutionState
+	 *            The final state of a solution
 	 * @return A stack containing all the board states leading to the solution, minus the start state
 	 */
 	private static Stack<BoardState> calculateSolutionPath(Tree<BoardState> solutionState)

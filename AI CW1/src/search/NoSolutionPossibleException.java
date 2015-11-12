@@ -1,6 +1,8 @@
 package search;
 
-
+/**
+ * Thrown if for a given initial board state, there is no way to generate a goal state from it
+ */
 public class NoSolutionPossibleException extends Exception
 {
 
@@ -8,6 +10,7 @@ public class NoSolutionPossibleException extends Exception
 	 * 
 	 */
 	private static final long serialVersionUID = -1061082434711759763L;
+
 
 	/**
 	 * 
@@ -17,6 +20,7 @@ public class NoSolutionPossibleException extends Exception
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 
 	/**
 	 * @param message
@@ -30,6 +34,7 @@ public class NoSolutionPossibleException extends Exception
 		// TODO Auto-generated constructor stub
 	}
 
+
 	/**
 	 * @param message
 	 * @param cause
@@ -40,6 +45,7 @@ public class NoSolutionPossibleException extends Exception
 		// TODO Auto-generated constructor stub
 	}
 
+
 	/**
 	 * @param message
 	 */
@@ -49,6 +55,7 @@ public class NoSolutionPossibleException extends Exception
 		// TODO Auto-generated constructor stub
 	}
 
+
 	/**
 	 * @param cause
 	 */
@@ -57,7 +64,5 @@ public class NoSolutionPossibleException extends Exception
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 }
