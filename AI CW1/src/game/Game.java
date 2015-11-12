@@ -14,6 +14,7 @@ import game.piece.Block;
 import game.piece.Block;
 import game.piece.PiecePosition;
 import game.piece.PieceType;
+import search.DepthFirstSearch;
 import search.NoSolutionPossibleException;
 import search.Search;
 import search.SearchType;
@@ -74,7 +75,7 @@ public class Game
 		switch (search)
 		{
 			case DEPTH_FIRST:
-				gameResult = Search.depthFirst(initBoardState);
+				gameResult = DepthFirstSearch.depthFirst(initBoardState);
 			default:
 				return gameResult;
 		}
