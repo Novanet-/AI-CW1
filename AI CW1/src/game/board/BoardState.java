@@ -2,12 +2,9 @@ package game.board;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import game.piece.Agent;
 import game.piece.Block;
-import game.piece.BoardPiece;
 import game.piece.PiecePosition;
 import utilities.Pair;
 
@@ -32,6 +29,13 @@ public class BoardState
 	}
 
 
+	/**
+	 * Checks each element of the board state for equality with each element of another board state
+	 * 
+	 * @param boardState
+	 *            The other board state to be checked for equality with this one
+	 * @return True if board states are equal, otherwise false
+	 */
 	public boolean equals(BoardState boardState)
 	{
 		boolean equalBoardState = true;
@@ -52,6 +56,12 @@ public class BoardState
 	}
 
 
+	/**
+	 * Generates a graphical representation of the BoardState, where empty tiles are '-', blocks are dentoed by their
+	 * letter, and the agent is represented by an 'x'
+	 * 
+	 * @return A graphical representation of the BoardState
+	 */
 	@Override
 	public String toString()
 	{
@@ -104,24 +114,34 @@ public class BoardState
 	}
 
 
+	/**
+	 * Generate all possible moves of the agent, where a possible move is one that does not take it out of the bounds of
+	 * the board
+	 * 
+	 * @return An ArrayList of all possible agent moves
+	 */
 	public ArrayList<BoardState> generatePossibleMoves()
 	{
 		ArrayList<BoardState> validMoves = new ArrayList<BoardState>();
 		BoardState boardStateCopy = this.copy();
 		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(boardStateCopy.getAgent().getPosition().x(), boardStateCopy.getAgent().getPosition().y()));
 		PiecePosition boardStateProbe = boardStateCopy.getAgent().getPosition();
+
 		ArrayList<Pair<Integer, Integer>> moveVectors = new ArrayList<Pair<Integer, Integer>>();
 		moveVectors.add(new Pair<Integer, Integer>(-1, 0));
 		moveVectors.add(new Pair<Integer, Integer>(0, 1));
 		moveVectors.add(new Pair<Integer, Integer>(1, 0));
 		moveVectors.add(new Pair<Integer, Integer>(0, -1));
+
 		for (Pair<Integer, Integer> moveVector : moveVectors)
 		{
 			ArrayList<Block> blockProbe = new ArrayList<Block>();
-			for (Block b: boardStateCopy.getBlocks())
+			for (Block b : boardStateCopy.getBlocks())
 			{
 				blockProbe.add(b.copy());
 			}
+
+			//Adjust the agent by each cardinal direciton and check for validity
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(boardStateProbe.x() + moveVector.getLeft(), boardStateProbe.y() + moveVector.getRight()));
 			if (isPieceInBounds(boardStateProbe))
 			{
@@ -137,17 +157,20 @@ public class BoardState
 				newAgent.getPosition().setPosition(new Pair<Integer, Integer>(boardStateProbe.x(), boardStateProbe.y()));
 				validMoves.add(new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe));
 			}
-			else
-			{
-				boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));
-			}
+
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));
 		}
-
 		return validMoves;
 	}
 
 
+	/**
+	 * Checks whether the given board piece is within the bounds of the grid of the board
+	 * 
+	 * @param boardStateProbe
+	 *            The piece of which it's position will be checked
+	 * @return True if piece is within bounds, otherwise false
+	 */
 	private boolean isPieceInBounds(PiecePosition boardStateProbe)
 	{
 		if ((boardStateProbe.x() >= 0) && (boardStateProbe.x() < this.getBoard().getHeight()))
@@ -161,11 +184,19 @@ public class BoardState
 	}
 
 
+	/**
+	 * Checks that the heaviest block(biggest letter in the alphabet where B > A, C > B etc.) is on the bottom row on
+	 * the grid, and that the lighter letters in the array of blocks, going sequentially backwards along the alphabet
+	 * from the heaviest letter to A, are on top of the heavier letter, and that they are all in the same column
+	 * 
+	 * @return true if this BoardState is a goal state, otherwise return false
+	 */
 	public boolean isGoalState()
 	{
 		Block lastBlock = this.getBlocks().get(getBlocks().size() - 1);
 		if (blockOnTable(lastBlock))
 		{
+
 			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
 			{
 				Block smallerBlock = getBlocks().get(i);
@@ -186,8 +217,11 @@ public class BoardState
 
 
 	/**
+	 * Checks that the block is on the bottom row of the grid
+	 * 
 	 * @param block
-	 * @return
+	 *            The heaviest block in the block array
+	 * @return true if block is on the bottom row, otherwise false
 	 */
 	private boolean blockOnTable(Block lastBlock)
 	{
@@ -195,6 +229,9 @@ public class BoardState
 	}
 
 
+	/**
+	 * @return A deep copy of this boardstate
+	 */
 	public BoardState copy()
 	{
 		return new BoardState(new Rectangle(this.getBoard()), this.getAgent().copy(), new ArrayList<Block>(this.getBlocks()));

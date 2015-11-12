@@ -86,9 +86,11 @@ public class Game
 				GameResult result = game.runGame(game.getBoardstate(), Game.goalState, SearchType.DEPTH_FIRST);
 				nodesAccumulator +=  result.getNodesExpanded();
 				agentAccumulator +=  result.getAgentMoves();
-				BoardState finalState = result.getSolutionPath().elementAt(result.getSolutionPath().size() - 1);
+				BoardState finalState = result.getSolutionPath().elementAt(0);
+				System.out.println("*************************************\n");
 				System.out.println(finalState);
 				System.out.println(result.getNodesExpanded() + ", " + result.getAgentMoves());
+				System.out.println("*************************************\n");
 			}
 			nodesAccumulator = nodesAccumulator / 100;
 			agentAccumulator = agentAccumulator /100;
