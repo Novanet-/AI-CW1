@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 import game.GameResult;
 import game.board.BoardState;
@@ -20,11 +21,12 @@ public class Search
 		boolean goalStateFound = false;
 		while (!(goalStateFound) || (nodeCounter < 6))
 		{
-			System.out.println(searchTree.getVal());
 			if (searchTree.getVal().isGoalState())
 			{
 				goalStateFound = true;
-				return new GameResult(searchTree.getVal(), nodeCounter, 0);
+				
+				Stack<BoardState> solutionPath = calculateSolutionPath(searchTree);
+				return new GameResult(solutionPath, nodeCounter, solutionPath.size());
 			}
 			
 			visitedBoardStates.add(searchTree.getVal());
@@ -36,6 +38,7 @@ public class Search
 				if (!(visitedBoardStates.contains(bState)))
 				{
 					searchTree.getChildren().add(new Tree<BoardState>(bState, searchTree, new ArrayList<Tree<BoardState>>()));
+					nodeCounter++;
 				}
 			}
 			
@@ -55,12 +58,26 @@ public class Search
 			{
 				Random rand = new Random();
 				searchTree = searchTree.getChildren().get(rand.nextInt(searchTree.getChildren().size()));
-				nodeCounter++;
 			}
 
 		}
 		return null;
 
+	}
+
+
+	private static Stack<BoardState> calculateSolutionPath(Tree<BoardState> searchTree)
+	{
+		Stack<BoardState> solutionPath = new Stack<BoardState>();
+		int agentMoves = 0;
+		while (searchTree.getParent() != null)
+		{
+			solutionPath.push(searchTree.getVal());
+			agentMoves += 1;
+			searchTree = searchTree.getParent();
+		}
+		System.out.println(agentMoves);
+		return solutionPath;
 	}
 
 

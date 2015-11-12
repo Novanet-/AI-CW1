@@ -5,6 +5,8 @@ package game;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.Stack;
 
 import game.board.BoardState;
 import game.piece.Agent;
@@ -77,11 +79,34 @@ public class Game
 		try
 		{
 			//System.out.println(goalState.isGoalState());
-			game.runGame(game.getBoardstate(), Game.goalState , SearchType.DEPTH_FIRST);
+			int nodesAccumulator = 0;
+			int agentAccumulator = 0;
+			for (int i = 0; i < 100; i++)
+			{
+				GameResult result = game.runGame(game.getBoardstate(), Game.goalState, SearchType.DEPTH_FIRST);
+				nodesAccumulator +=  result.getNodesExpanded();
+				agentAccumulator +=  result.getAgentMoves();
+				BoardState finalState = result.getSolutionPath().elementAt(result.getSolutionPath().size() - 1);
+				System.out.println(finalState);
+				System.out.println(result.getNodesExpanded() + ", " + result.getAgentMoves());
+			}
+			nodesAccumulator = nodesAccumulator / 100;
+			agentAccumulator = agentAccumulator /100;
+			System.out.println(" ");
+			System.out.println(nodesAccumulator + " , " + agentAccumulator);
+			
 		}
 		catch (NoSolutionPossibleException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public void printSolutionPath(Stack<BoardState> solutionPath)
+	{
+		while (!(solutionPath.isEmpty()))
+		{
+			System.out.println(solutionPath.pop());
 		}
 	}
 

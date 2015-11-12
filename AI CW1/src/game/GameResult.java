@@ -1,24 +1,46 @@
 package game;
 
+import java.util.Stack;
+
 import game.board.BoardState;
 
 public class GameResult
 {
-		BoardState board;
+	Stack<BoardState> solutionPath;
 		Integer nodesExpanded, agentMoves;
 		
 		/**
-		 * @param board
+		 * @param solutionPath
 		 * @param nodesExpanded
 		 * @param agentMoves
 		 */
-		public GameResult(BoardState board, Integer nodesExpanded, Integer agentMoves)
+		public GameResult(Stack<BoardState> solutionPath, Integer nodesExpanded, Integer agentMoves)
 		{
 			super();
-			this.board = board;
+			this.solutionPath = solutionPath;
 			this.nodesExpanded = nodesExpanded;
 			this.agentMoves = agentMoves;
 		}
+
+		
+		public Stack<BoardState> getSolutionPath()
+		{
+			return solutionPath;
+		}
+
+		
+		public Integer getNodesExpanded()
+		{
+			return nodesExpanded;
+		}
+
+		
+		public Integer getAgentMoves()
+		{
+			return agentMoves;
+		}
+		
+		
 		
 		
 }
