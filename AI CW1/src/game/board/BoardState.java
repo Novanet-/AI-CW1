@@ -7,6 +7,7 @@ import game.piece.Agent;
 import game.piece.Block;
 import game.piece.PiecePosition;
 import utilities.Pair;
+import utilities.Tree;
 
 public class BoardState
 {
@@ -36,18 +37,19 @@ public class BoardState
 	 *            The other board state to be checked for equality with this one
 	 * @return True if board states are equal, otherwise false
 	 */
-	public boolean equals(BoardState boardState)
+	@Override
+	public boolean equals(Object obj)
 	{
 		boolean equalBoardState = true;
-		if (!(this.board.equals(boardState.getBoard())))
+		if (!(this.board.equals(((BoardState) obj).getBoard())))
 		{
 			equalBoardState = false;
 		}
-		if (!(this.getAgent().equals(boardState.getAgent())))
+		if (!(this.getAgent().equals(((BoardState) obj).getAgent())))
 		{
 			equalBoardState = false;
 		}
-		if (!(this.getBlocks().equals(boardState.getBlocks())))
+		if (!(this.getBlocks().equals(((BoardState) obj).getBlocks())))
 		{
 			equalBoardState = false;
 		}
@@ -120,9 +122,9 @@ public class BoardState
 	 * 
 	 * @return An ArrayList of all possible agent moves
 	 */
-	public ArrayList<BoardState> generatePossibleMoves()
+	public ArrayList<Tree<BoardState>> generatePossibleMoves(Tree<BoardState> currentNode)
 	{
-		ArrayList<BoardState> validMoves = new ArrayList<BoardState>();
+		ArrayList<Tree<BoardState>> validMoves = new ArrayList<Tree<BoardState>>();
 		BoardState boardStateCopy = this.copy();
 		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(boardStateCopy.getAgent().getPosition().x(), boardStateCopy.getAgent().getPosition().y()));
 		PiecePosition boardStateProbe = boardStateCopy.getAgent().getPosition();
@@ -155,7 +157,8 @@ public class BoardState
 				}
 				Agent newAgent = boardStateCopy.getAgent().copy();
 				newAgent.getPosition().setPosition(new Pair<Integer, Integer>(boardStateProbe.x(), boardStateProbe.y()));
-				validMoves.add(new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe));
+				BoardState validMove = new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe);
+				validMoves.add(new Tree<BoardState>(validMove, currentNode, new ArrayList<Tree<BoardState>>()));
 			}
 
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));

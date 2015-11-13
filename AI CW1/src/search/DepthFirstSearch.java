@@ -31,7 +31,7 @@ public class DepthFirstSearch extends Search
 	 */
 	public static GameResult depthFirst(BoardState initBoardState) throws NoSolutionPossibleException
 	{
-		Tree<BoardState> searchTree = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
 		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
 
 		int nodeCounter = 1;
@@ -39,32 +39,32 @@ public class DepthFirstSearch extends Search
 
 		while (!(goalStateFound))
 		{
-			BoardState currentBoardState = searchTree.getVal();
+			BoardState currentBoardState = currentNode.getVal();
 			if (currentBoardState.isGoalState())
 			{
 				goalStateFound = true;
-				Stack<BoardState> solutionPath = calculateSolutionPath(searchTree);
-				return new GameResult(solutionPath, nodeCounter, solutionPath.size());
+				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
+				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
 			}
 
 			visitedBoardStates.add(currentBoardState);
 
-			ArrayList<BoardState> possibleMoves = currentBoardState.generatePossibleMoves();
-			ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(searchTree, possibleMoves, visitedBoardStates);
+			ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
+			ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
 			
 			nodeCounter = nodeCounter + nextMoves.size();
 
 			if (nextMoves.isEmpty())
 			{
-				searchTree = moveUpToParent(searchTree);
+				currentNode = moveUpToParent(currentNode);
 			}
 			else
 			{
-				searchTree = expandRandomChild(nextMoves);
+				currentNode = expandRandomChild(nextMoves);
 			}
 
 		}
-		return null;
+		return new GameResult(false, null, nodeCounter, 0);
 	}
 
 	/**
@@ -80,31 +80,31 @@ public class DepthFirstSearch extends Search
 	}
 
 	/**
-	 * @param searchTree
+	 * @param currentNode
 	 * @return
 	 * @throws NoSolutionPossibleException
 	 */
-	private static Tree<BoardState> moveUpToParent(Tree<BoardState> searchTree) throws NoSolutionPossibleException
+	private static Tree<BoardState> moveUpToParent(Tree<BoardState> currentNode) throws NoSolutionPossibleException
 	{
-		if (!(searchTree.getParent() == null)) //If there are no valid moves, and the current node has  parent, move up to the parent
+		if (!(currentNode.getParent() == null)) //If there are no valid moves, and the current node has  parent, move up to the parent
 		{
-			searchTree = searchTree.getParent();
+			currentNode = currentNode.getParent();
 		}
 		else
 		{
 			throw new NoSolutionPossibleException();
 		}
-		return searchTree;
+		return currentNode;
 	}
 	
-	private static ArrayList<Tree<BoardState>> filterOutSeenStates(Tree<BoardState> searchTree, ArrayList<BoardState> possibleMoves, HashSet<BoardState> visitedBoardStates)
+	private static ArrayList<Tree<BoardState>> filterOutSeenStates(Tree<BoardState> currentNode, ArrayList<Tree<BoardState>> possibleMoves, HashSet<BoardState> visitedBoardStates)
 	{
-		ArrayList<Tree<BoardState>> nextMoves = searchTree.getChildren();
-		for (BoardState bState : possibleMoves)
+		ArrayList<Tree<BoardState>> nextMoves = currentNode.getChildren();
+		for (Tree<BoardState> bState : possibleMoves)
 		{
 			if (!(visitedBoardStates.contains(bState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
 			{
-				nextMoves.add(new Tree<BoardState>(bState, searchTree, new ArrayList<Tree<BoardState>>()));
+				nextMoves.add(new Tree<BoardState>(bState.getVal(), currentNode, new ArrayList<Tree<BoardState>>()));
 			}
 		}
 		return nextMoves;

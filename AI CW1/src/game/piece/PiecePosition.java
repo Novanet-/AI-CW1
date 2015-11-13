@@ -50,6 +50,18 @@ public class PiecePosition
 
 
 	@Override
+	public boolean equals(Object obj)
+	{
+		boolean equalBoardState = true;
+		if ((!(this.x().equals(((PiecePosition) obj).x()))) || ((!(this.y().equals(((PiecePosition) obj).y())))))
+		{
+			equalBoardState = false;
+		}
+
+		return equalBoardState;
+	}
+	
+	@Override
 	public String toString()
 	{
 		return new String(this.x() + "," + this.y());

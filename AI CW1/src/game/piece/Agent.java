@@ -3,6 +3,7 @@
  */
 package game.piece;
 
+import game.board.BoardState;
 import utilities.Pair;
 
 public class Agent extends BoardPiece
@@ -27,6 +28,26 @@ public class Agent extends BoardPiece
 	public String toString()
 	{
 		return new String(name + "," + type.toString() + "," + position.toString());
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		boolean equalBoardState = true;
+		if (!(this.getName().equals(((Agent) obj).getName())))
+		{
+			equalBoardState = false;
+		}
+		if (!(this.getType().equals(((Agent) obj).getType())))
+		{
+			equalBoardState = false;
+		}
+		if (!(this.getPosition().equals(((Agent) obj).getPosition())))
+		{
+			equalBoardState = false;
+		}
+
+		return equalBoardState;
 	}
 
 }

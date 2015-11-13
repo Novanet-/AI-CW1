@@ -14,6 +14,7 @@ import game.piece.Block;
 import game.piece.Block;
 import game.piece.PiecePosition;
 import game.piece.PieceType;
+import search.BreadthFirstSearch;
 import search.DepthFirstSearch;
 import search.NoSolutionPossibleException;
 import search.Search;
@@ -76,9 +77,14 @@ public class Game
 		{
 			case DEPTH_FIRST:
 				gameResult = DepthFirstSearch.depthFirst(initBoardState);
+				break;
+			case BREADTH_FIRST:
+				gameResult = BreadthFirstSearch.breadthFirst(initBoardState);
+				break;
 			default:
-				return gameResult;
+				break;
 		}
+		return gameResult;
 	}
 
 
@@ -92,7 +98,9 @@ public class Game
 			int agentAccumulator = 0;
 			for (int i = 0; i < 100; i++)
 			{
-				GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
+//				GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
+				GameResult result = game.runGame(game.getBoardstate(), SearchType.BREADTH_FIRST);
+
 				nodesAccumulator += result.getNodesExpanded();
 				agentAccumulator += result.getAgentMoves();
 				BoardState finalState = result.getSolutionPath().elementAt(0);

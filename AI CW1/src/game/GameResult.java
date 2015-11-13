@@ -7,6 +7,7 @@ import game.board.BoardState;
 public class GameResult
 {
 
+	boolean				solutionFound;
 	Stack<BoardState>	solutionPath;
 	Integer				nodesExpanded, agentMoves;
 
@@ -22,13 +23,23 @@ public class GameResult
 	 * @param agentMoves
 	 *            The number of moves the agent has to take to reach the goal state from the start state
 	 */
-	public GameResult(Stack<BoardState> solutionPath, Integer nodesExpanded, Integer agentMoves)
+	public GameResult(boolean solutionFound, Stack<BoardState> solutionPath, Integer nodesExpanded, Integer agentMoves)
 	{
 		super();
+		this.solutionFound = solutionFound;
 		this.solutionPath = solutionPath;
 		this.nodesExpanded = nodesExpanded;
 		this.agentMoves = agentMoves;
 	}
+
+	
+
+	
+	public boolean isSolutionFound()
+	{
+		return solutionFound;
+	}
+
 
 
 	public Stack<BoardState> getSolutionPath()
