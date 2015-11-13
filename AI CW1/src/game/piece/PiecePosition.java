@@ -5,7 +5,7 @@ import utilities.Pair;
 public class PiecePosition
 {
 
-	Pair<Integer, Integer> position;
+	private Pair<Integer, Integer> position;
 
 
 	/**

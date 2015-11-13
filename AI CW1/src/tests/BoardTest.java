@@ -36,7 +36,7 @@ public class BoardTest
 		blocks2.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1,1))));
 		blocks2.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2,1))));
 		Agent agent2 = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3,1)));
-		board1 = new BoardState(new Rectangle(8, 8), agent2, blocks2);
+		board2 = new BoardState(new Rectangle(8, 8), agent2, blocks2);
 	}
 
 

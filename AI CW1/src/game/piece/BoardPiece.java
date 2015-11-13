@@ -3,9 +3,9 @@ package game.piece;
 
 public class BoardPiece
 {
-	String name;
-	PieceType type;
-	PiecePosition position;
+	private String name;
+	private PieceType type;
+	private PiecePosition position;
 	
 	/**
 	 * @param name

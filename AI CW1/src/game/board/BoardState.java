@@ -40,23 +40,32 @@ public class BoardState
 	@Override
 	public boolean equals(Object obj)
 	{
-		boolean equalBoardState = true;
-		if (!(this.board.equals(((BoardState) obj).getBoard())))
-		{
-			equalBoardState = false;
-		}
-		if (!(this.getAgent().equals(((BoardState) obj).getAgent())))
-		{
-			equalBoardState = false;
-		}
-		if (!(this.getBlocks().equals(((BoardState) obj).getBlocks())))
-		{
-			equalBoardState = false;
-		}
-
-		return equalBoardState;
+//		boolean equalBoardState = true;
+//		if (!(this.getBoard().equals(((BoardState) obj).getBoard())))
+//		{
+//			equalBoardState = false;
+//		}
+//		if (!(this.getAgent().equals(((BoardState) obj).getAgent())))
+//		{
+//			equalBoardState = false;
+//		}
+//		if (!(this.getBlocks().equals(((BoardState) obj).getBlocks())))
+//		{
+//			equalBoardState = false;
+//		}
+//
+//		return equalBoardState;
+		return this.toString().equals(((BoardState) obj).toString());
 	}
-
+	
+//    @Override
+//    public int hashCode() {
+//        final int prime = 31;
+//        int result = 1;
+//        result = prime * result
+//                + ((this.getAgent().getPosition() == null) ? 0 : this.getAgent().getPosition().hashCode());
+//        return result;
+//    }
 
 	/**
 	 * Generates a graphical representation of the BoardState, where empty tiles are '-', blocks are dentoed by their
@@ -238,6 +247,14 @@ public class BoardState
 	public BoardState copy()
 	{
 		return new BoardState(new Rectangle(this.getBoard()), this.getAgent().copy(), new ArrayList<Block>(this.getBlocks()));
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
 
 }

@@ -14,12 +14,12 @@ public class Block extends BoardPiece
 	@Override
 	public String toString()
 	{
-		return new String(name + "," + type.toString() + "," + position.toString());
+		return new String(super.getName() + "," + super.getType().toString() + "," + super.getPosition().toString());
 	}
 	
 	public Block copy()
 	{
-		return new Block(this.name, this.type, new PiecePosition(new Pair<Integer, Integer>(this.position.x(), this.position.y())));
+		return new Block(super.getName(), super.getType(), new PiecePosition(new Pair<Integer, Integer>(super.getPosition().x(), super.getPosition().y())));
 	}
 
 }

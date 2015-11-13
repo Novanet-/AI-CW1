@@ -7,9 +7,9 @@ import game.board.BoardState;
 public class GameResult
 {
 
-	boolean				solutionFound;
-	Stack<BoardState>	solutionPath;
-	Integer				nodesExpanded, agentMoves;
+	private boolean				solutionFound;
+	private Stack<BoardState>	solutionPath;
+	private Integer				nodesExpanded, agentMoves;
 
 
 	/**

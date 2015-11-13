@@ -27,8 +27,8 @@ import utilities.Pair;
 public class Game
 {
 
-	BoardState			boardstate;
-	static BoardState	goalState;
+	private BoardState			boardstate;
+	private static BoardState	goalState;
 
 
 	/**

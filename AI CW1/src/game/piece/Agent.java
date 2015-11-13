@@ -22,12 +22,12 @@ public class Agent extends BoardPiece
 	
 	public Agent copy()
 	{
-		return new Agent(this.name, this.type, new PiecePosition(new Pair<Integer, Integer>(this.position.x(), this.position.y())));
+		return new Agent(super.getName(), super.getType(), new PiecePosition(new Pair<Integer, Integer>(super.getPosition().x(), super.getPosition().y())));
 	}
 	
 	public String toString()
 	{
-		return new String(name + "," + type.toString() + "," + position.toString());
+		return new String(super.getName() + "," + super.getType().toString() + "," + super.getPosition().toString());
 	}
 	
 	@Override
