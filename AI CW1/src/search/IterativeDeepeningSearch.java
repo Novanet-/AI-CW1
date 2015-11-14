@@ -87,22 +87,33 @@ public class IterativeDeepeningSearch extends Search
 			ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
 			ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
 
-			nodeCounter = nodeCounter + nextMoves.size();
+			//nodeCounter = nodeCounter + nextMoves.size();
 
 			if (nextMoves.isEmpty())
 			{
+				currentLevel--;
 				currentNode = moveUpToParent(currentNode);
+				if (currentNode == null)
+				{
+					return new GameResult(false, null, nodeCounter, maxDepth);
+				}
 			}
 			else
 			{
 				if (currentLevel < maxDepth)
 				{
 					currentLevel++;
+					nodeCounter++;
 					currentNode = expandRandomChild(nextMoves);
 				}
 				else
 				{
-					return new GameResult(false, null, nodeCounter, currentLevel + 1);
+					currentLevel--;
+					currentNode = moveUpToParent(currentNode);
+					if (currentNode == null)
+					{
+						return new GameResult(false, null, nodeCounter, maxDepth);
+					}
 				}
 
 			}
@@ -138,7 +149,7 @@ public class IterativeDeepeningSearch extends Search
 		}
 		else
 		{
-			throw new NoSolutionPossibleException();
+			return null;
 		}
 		return currentNode;
 	}
@@ -148,11 +159,13 @@ public class IterativeDeepeningSearch extends Search
 			HashSet<BoardState> visitedBoardStates)
 	{
 		ArrayList<Tree<BoardState>> nextMoves = currentNode.getChildren();
-		for (Tree<BoardState> bState : possibleMoves)
+		nextMoves.clear();
+		for (Tree<BoardState> possibleMove : possibleMoves)
 		{
-			if (!(visitedBoardStates.contains(bState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
+			BoardState succesorBState = possibleMove.getVal();
+			if (!(visitedBoardStates.contains(succesorBState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
 			{
-				nextMoves.add(new Tree<BoardState>(bState.getVal(), currentNode, new ArrayList<Tree<BoardState>>()));
+				nextMoves.add(new Tree<BoardState>(succesorBState, currentNode, new ArrayList<Tree<BoardState>>()));
 			}
 		}
 		return nextMoves;
