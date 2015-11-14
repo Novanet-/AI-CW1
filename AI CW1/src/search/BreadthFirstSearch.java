@@ -37,7 +37,7 @@ public class BreadthFirstSearch extends Search
 			currentNode = fringe.remove();
 			currentBoardState = currentNode.getVal();
 //			System.out.println(currentBoardState);
-			System.out.println(nodeCounter);
+//			System.out.println(nodeCounter);
 
 			if (currentBoardState.isGoalState())
 			{

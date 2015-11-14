@@ -39,7 +39,7 @@ public class IterativeDeepeningSearch extends Search
 		int maxDepth = 0;
 		int highestLevelReached = 0;
 
-		while (!(solution.isSolutionFound()))
+		while (solution.isSolutionFound() == false)
 		{
 			try
 			{
@@ -101,7 +101,7 @@ public class IterativeDeepeningSearch extends Search
 				}
 				else
 				{
-					return new GameResult(false, null, nodeCounter, currentLevel);
+					return new GameResult(false, null, nodeCounter, currentLevel + 1);
 				}
 
 			}
