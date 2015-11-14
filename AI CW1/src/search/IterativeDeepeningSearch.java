@@ -103,7 +103,7 @@ public class IterativeDeepeningSearch extends Search
 				if (currentLevel < maxDepth)
 				{
 					currentLevel++;
-					nodeCounter++;
+					nodeCounter++; 
 					currentNode = expandRandomChild(nextMoves);
 				}
 				else
