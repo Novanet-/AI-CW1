@@ -36,7 +36,7 @@ public class IterativeDeepeningSearch extends Search
 	public static GameResult iterativeDeepening(BoardState initBoardState)
 	{
 		GameResult solution = new GameResult(false, null, null, null);
-		int maxDepth = 0;
+		int maxDepth = 1;
 		int highestLevelReached = 0;
 
 		while (solution.isSolutionFound() == false)
@@ -97,6 +97,7 @@ public class IterativeDeepeningSearch extends Search
 			{
 				if (currentLevel < maxDepth)
 				{
+					currentLevel++;
 					currentNode = expandRandomChild(nextMoves);
 				}
 				else
