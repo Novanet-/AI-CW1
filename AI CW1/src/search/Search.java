@@ -1,18 +1,13 @@
 package search;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 import java.util.Stack;
 
-import game.GameResult;
 import game.board.BoardState;
 import utilities.Tree;
 
 public class Search
 {
-	
+
 	/**
 	 * @param solutionState
 	 *            The final state of a solution
@@ -27,21 +22,6 @@ public class Search
 			solutionState = solutionState.getParent();
 		}
 		return solutionPath;
-	}
-
-
-
-	public static GameResult iterativeDeepening(BoardState initBoardState)
-	{
-		return null;
-
-	}
-
-
-	public static GameResult aStar(BoardState initBoardState)
-	{
-		return null;
-
 	}
 
 }

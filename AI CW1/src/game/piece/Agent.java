@@ -19,17 +19,20 @@ public class Agent extends BoardPiece
 		super(name, type, position);
 		// TODO Auto-generated constructor stub
 	}
-	
+
+
 	public Agent copy()
 	{
 		return new Agent(super.getName(), super.getType(), new PiecePosition(new Pair<Integer, Integer>(super.getPosition().x(), super.getPosition().y())));
 	}
-	
+
+
 	public String toString()
 	{
 		return new String(super.getName() + "," + super.getType().toString() + "," + super.getPosition().toString());
 	}
-	
+
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -48,6 +51,17 @@ public class Agent extends BoardPiece
 		}
 
 		return equalBoardState;
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 97 * hash + (this.getName().hashCode());
+		hash = 97 * hash + (this.getType().hashCode());
+		hash = (97 * hash + (this.getPosition().x()) + (this.getPosition().y()));
+		return hash;
 	}
 
 }

@@ -68,4 +68,13 @@ public class PiecePosition
 
 	}
 
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 13;
+		hash = (103 * hash + (this.x()) + (this.y()));
+		return hash;
+	}
+
 }

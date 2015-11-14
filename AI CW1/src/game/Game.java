@@ -16,6 +16,7 @@ import game.piece.PiecePosition;
 import game.piece.PieceType;
 import search.BreadthFirstSearch;
 import search.DepthFirstSearch;
+import search.IterativeDeepeningSearch;
 import search.NoSolutionPossibleException;
 import search.Search;
 import search.SearchType;
@@ -81,6 +82,8 @@ public class Game
 			case BREADTH_FIRST:
 				gameResult = BreadthFirstSearch.breadthFirst(initBoardState);
 				break;
+			case ITERATIVE_DEEPENING:
+				gameResult = IterativeDeepeningSearch.iterativeDeepening(initBoardState);
 			default:
 				break;
 		}
@@ -96,23 +99,30 @@ public class Game
 			//System.out.println(goalState.isGoalState());
 			int nodesAccumulator = 0;
 			int agentAccumulator = 0;
-			for (int i = 0; i < 100; i++)
-			{
-//				GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
-				GameResult result = game.runGame(game.getBoardstate(), SearchType.BREADTH_FIRST);
-
-				nodesAccumulator += result.getNodesExpanded();
-				agentAccumulator += result.getAgentMoves();
-				BoardState finalState = result.getSolutionPath().elementAt(0);
-				System.out.println("*************************************\n");
-				System.out.println(finalState);
-				System.out.println(result.getNodesExpanded() + ", " + result.getAgentMoves());
-				System.out.println("*************************************\n");
-			}
-			nodesAccumulator = nodesAccumulator / 100;
-			agentAccumulator = agentAccumulator / 100;
+//			for (int i = 0; i < 100; i++)
+//			{
+////				GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
+////				GameResult result = game.runGame(game.getBoardstate(), SearchType.BREADTH_FIRST);
+//				GameResult result = game.runGame(game.getBoardstate(), SearchType.ITERATIVE_DEEPENING);
+//
+//				nodesAccumulator += result.getNodesExpanded();
+//				agentAccumulator += result.getAgentMoves();
+//				BoardState finalState = result.getSolutionPath().elementAt(0);
+//				System.out.println("*************************************\n");
+//				System.out.println(finalState);
+//				System.out.println(result.getNodesExpanded() + ", " + result.getAgentMoves());
+//				System.out.println("*************************************\n");
+//			}
+//			nodesAccumulator = nodesAccumulator / 100;
+//			agentAccumulator = agentAccumulator / 100;
+//			System.out.println(nodesAccumulator + " , " + agentAccumulator);
+			
+//			GameResult result = game.runGame(game.getBoardstate(), SearchType.DEPTH_FIRST);
+//			GameResult result = game.runGame(game.getBoardstate(), SearchType.BREADTH_FIRST);
+			GameResult result = game.runGame(game.getBoardstate(), SearchType.ITERATIVE_DEEPENING);
 			System.out.println(" ");
-			System.out.println(nodesAccumulator + " , " + agentAccumulator);
+			game.printSolutionPath(result.getSolutionPath());
+			System.out.println(result.getNodesExpanded() + " , " + result.getAgentMoves());
 
 		}
 		catch (NoSolutionPossibleException e)
