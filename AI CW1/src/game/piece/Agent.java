@@ -3,7 +3,6 @@
  */
 package game.piece;
 
-import game.board.BoardState;
 import utilities.Pair;
 
 public class Agent extends BoardPiece

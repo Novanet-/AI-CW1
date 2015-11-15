@@ -8,20 +8,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Stack;
 
 import game.board.BoardState;
 import game.piece.Agent;
 import game.piece.Block;
-import game.piece.Block;
 import game.piece.PiecePosition;
 import game.piece.PieceType;
 import search.BreadthFirstSearch;
 import search.DepthFirstSearch;
+import search.Heuristic;
 import search.IterativeDeepeningSearch;
 import search.NoSolutionPossibleException;
-import search.Search;
 import search.SearchType;
 import utilities.Pair;
 
@@ -140,6 +138,13 @@ public class Game
 					}
 					break;
 				case A_STAR:
+					for (i = 0; i < iterations; i++)
+					{
+						gameResult = Heuristic.heuristic(game.getBoardstate());
+						nodesAccumulator += gameResult.getNodesExpanded();
+						agentAccumulator += gameResult.getAgentMoves();
+						printResult(gameResult);
+					}
 					break;
 				default:
 					break;

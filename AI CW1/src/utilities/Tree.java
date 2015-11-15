@@ -1,9 +1,6 @@
 package utilities;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-
-import game.board.BoardState;
 
 public class Tree<T>
 {
@@ -45,37 +42,49 @@ public class Tree<T>
 	}
 
 
-	private void setChildren(ArrayList<Tree<T>> children)
+	public void setChildren(ArrayList<Tree<T>> children)
 	{
 		this.children = children;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj)
 	{
 		boolean treesEqual = true;
+
 		if (!(this.getVal().equals(((Tree<T>) obj).getVal())))
 		{
 			treesEqual = false;
 		}
+
 		if ((this.getParent() == null) || (((Tree<T>) obj).getParent() == null))
 		{
-			if (!(this.getParent() == ((Tree<T>) obj).getParent()))
+			if (!(((this.getParent() == null) && (((Tree<T>) obj).getParent() == null))))
 			{
 				treesEqual = false;
 			}
-			else
+		}
+		else if (!(this.getParent().getVal().equals(((Tree<T>) obj).getParent().getVal())))
+		{
+			treesEqual = false;
+		}
+
+		//		if (!(this.getChildren().equals(((Tree<T>) obj).getChildren())))
+		//		{
+		//			treesEqual = false;
+		//		}
+
+		for (Tree<T> c1 : this.getChildren())
+		{
+			for (Tree<T> c2 : this.getChildren())
 			{
-				if (!(this.getParent().equals(((Tree<T>) obj).getParent())))
+				if (!(c1.getVal().equals(c2.getVal())))
 				{
 					treesEqual = false;
 				}
 			}
-		}
-		if (!(this.getChildren().equals(((Tree<T>) obj).getChildren())))
-		{
-			treesEqual = false;
 		}
 
 		return treesEqual;
@@ -91,6 +100,21 @@ public class Tree<T>
 			childVals.add(children.getVal());
 		}
 		return new String("Node: \n" + this.getVal() + "Parent: \n" + this.getParent().getVal() + "Children: \n" + childVals);
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 3;
+		hash = 37 * hash + (this.getVal().hashCode());
+		hash = 37 * hash + (this.getParent() == null ? 0 : this.getParent().getVal().hashCode());
+		for (Tree<T> c : this.getChildren())
+		{
+			hash = (37 * hash + (c.getVal().hashCode()));
+
+		}
+		return hash;
 	}
 
 }
