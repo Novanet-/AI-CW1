@@ -117,11 +117,12 @@ public class Game
 
 					for (i = 0; i < iterations; i++)
 					{
-						dfsGameResult = DepthFirstSearch.depthFirst(game.getBoardstate());
+						dfsGameResult = DepthFirstSearch.altDepthFirst(game.getBoardstate());
 						dfsNodesAccumulator += dfsGameResult.getNodesExpanded();
 						dfsAgentAccumulator += dfsGameResult.getAgentMoves();
 						printResult(dfsGameResult);
 					}
+//					break;
 
 				case BREADTH_FIRST:
 					for (i = 0; i < iterations; i++)
@@ -172,7 +173,7 @@ public class Game
 			}
 
 		}
-		catch (IOException | NoSolutionPossibleException e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}

@@ -78,45 +78,47 @@ public class DepthFirstSearch extends Search
 		return new GameResult(false, null, nodeCounter, 0);
 	}
 	
-//	public static GameResult altDepthFirst(BoardState initBoardState)
-//	{
-//		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
-//		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
-//		Deque<Tree<BoardState>> fringe = new ArrayDeque<Tree<BoardState>>();
-//
-//		int nodeCounter = 0;
-//		boolean goalStateFound = false;
-//
-//		fringe.addFirst(new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>()));
-//		BoardState currentBoardState;
-//
-//		while ((!(goalStateFound) || !(fringe.isEmpty())))
-//		{
-//			currentNode = fringe.removeFirst();
-//			currentBoardState = currentNode.getVal();
-////			System.out.println(currentBoardState);
-////			System.out.println(nodeCounter);
-//
-//			if (currentBoardState.isGoalState())
-//			{
-//				goalStateFound = true;
-//				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
-//				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
-//			}
-//			else
-//			{
-//				visitedBoardStates.add(currentBoardState);
-//				nodeCounter++;
-//				ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
-//				ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates);
-//				for (Tree<BoardState> move: nextMoves)
-//				{
-//					fringe.addFirst(move);
-//				}
-//			}
-//		}
-//		return new GameResult(false, null, nodeCounter, 0);
-//	}
+	public static GameResult altDepthFirst(BoardState initBoardState)
+	{
+		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
+		Deque<Tree<BoardState>> fringe = new ArrayDeque<Tree<BoardState>>();
+
+		int nodeCounter = 0;
+		boolean goalStateFound = false;
+
+		fringe.addFirst(new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>()));
+		BoardState currentBoardState;
+
+		while ((!(goalStateFound) || !(fringe.isEmpty())))
+		{
+			currentNode = fringe.removeFirst();
+			currentBoardState = currentNode.getVal();
+//			System.out.println(currentBoardState);
+//			System.out.println(nodeCounter);
+
+			if (currentBoardState.isGoalState())
+			{
+				goalStateFound = true;
+				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
+				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
+			}
+			else
+			{
+				visitedBoardStates.add(currentBoardState);
+				nodeCounter++;
+				ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
+				ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates);
+				while (!(nextMoves.isEmpty()))
+				{
+					Random rand = new Random();
+					int index = rand.nextInt(nextMoves.size());
+					fringe.addFirst(nextMoves.remove(index));
+				}
+			}
+		}
+		return new GameResult(false, null, nodeCounter, 0);
+	}
 
 	/**
 	 * @param nextMoves
