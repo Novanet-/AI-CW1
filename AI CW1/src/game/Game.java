@@ -101,11 +101,15 @@ public class Game
 			int iterations = Integer.parseInt(br.readLine());
 			System.out.println("Select search type: '1. DFS 2. BFS 3. Iterative Deepening 4. Heuristic");
 			int searchTypeIndex = Integer.parseInt(br.readLine());
+			System.out.println("CSV? (y/n)");
+			boolean csvFile = true;
+			;
 
-			GameResult gameResult;
+			GameResult dfsGameResult = null, bfsGameResult = null, idGameResult = null, heurGameResult = null;
 			SearchType searchType = SearchType.values()[searchTypeIndex - 1];
 
-			int nodesAccumulator = 0, agentAccumulator = 0, i;
+			int dfsNodesAccumulator = 0, bfsNodesAccumulator = 0, idNodesAccumulator = 0, heurNodesAccumulator = 0, dfsAgentAccumulator = 0, bfsAgentAccumulator = 0,
+					idAgentAccumulator = 0, heurAgentAccumulator = 0, i;
 
 			switch (searchType)
 			{
@@ -113,50 +117,62 @@ public class Game
 
 					for (i = 0; i < iterations; i++)
 					{
-						gameResult = DepthFirstSearch.depthFirst(game.getBoardstate());
-						nodesAccumulator += gameResult.getNodesExpanded();
-						agentAccumulator += gameResult.getAgentMoves();
-						printResult(gameResult);
+						dfsGameResult = DepthFirstSearch.depthFirst(game.getBoardstate());
+						dfsNodesAccumulator += dfsGameResult.getNodesExpanded();
+						dfsAgentAccumulator += dfsGameResult.getAgentMoves();
+						printResult(dfsGameResult);
 					}
-					break;
+
 				case BREADTH_FIRST:
 					for (i = 0; i < iterations; i++)
 					{
-						gameResult = BreadthFirstSearch.breadthFirst(game.getBoardstate());
-						nodesAccumulator += gameResult.getNodesExpanded();
-						agentAccumulator += gameResult.getAgentMoves();
-						printResult(gameResult);
+						bfsGameResult = BreadthFirstSearch.breadthFirst(game.getBoardstate());
+						bfsNodesAccumulator += bfsGameResult.getNodesExpanded();
+						bfsAgentAccumulator += bfsGameResult.getAgentMoves();
+						printResult(bfsGameResult);
 					}
-					break;
+
 				case ITERATIVE_DEEPENING:
 					for (i = 0; i < iterations; i++)
 					{
-						gameResult = IterativeDeepeningSearch.iterativeDeepening(game.getBoardstate());
-						nodesAccumulator += gameResult.getNodesExpanded();
-						agentAccumulator += gameResult.getAgentMoves();
-						printResult(gameResult);
+						idGameResult = IterativeDeepeningSearch.iterativeDeepening(game.getBoardstate());
+						idNodesAccumulator += idGameResult.getNodesExpanded();
+						idAgentAccumulator += idGameResult.getAgentMoves();
+						printResult(idGameResult);
 					}
-					break;
+
 				case A_STAR:
 					for (i = 0; i < iterations; i++)
 					{
-						gameResult = Heuristic.heuristic(game.getBoardstate());
-						nodesAccumulator += gameResult.getNodesExpanded();
-						agentAccumulator += gameResult.getAgentMoves();
-						printResult(gameResult);
+						heurGameResult = Heuristic.heuristic(game.getBoardstate());
+						heurNodesAccumulator += heurGameResult.getNodesExpanded();
+						heurAgentAccumulator += heurGameResult.getAgentMoves();
+						printResult(heurGameResult);
 					}
 					break;
 				default:
 					break;
 			}
 
-			nodesAccumulator = nodesAccumulator / iterations;
-			agentAccumulator = agentAccumulator / iterations;
-			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::");
-			System.out.println("Average nodes expanded: " + nodesAccumulator + ", Average agent moves for solution: " + agentAccumulator);
+			////			nodesAccumulator = nodesAccumulator / iterations;
+			////			agentAccumulator = agentAccumulator / iterations;
+			//			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::");
+			//			System.out.println("Average nodes expanded: " + nodesAccumulator + ", Average agent moves for solution: " + agentAccumulator);
+
+			if (csvFile)
+			{
+				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + dfsNodesAccumulator / iterations + ","
+						+ dfsAgentAccumulator / iterations));
+				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + bfsNodesAccumulator / iterations + ","
+						+ bfsAgentAccumulator / iterations));
+				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + idNodesAccumulator / iterations + ","
+						+ idAgentAccumulator / iterations));
+				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + heurNodesAccumulator / iterations + ","
+						+ heurAgentAccumulator / iterations));
+			}
 
 		}
-		catch (NoSolutionPossibleException | IOException e)
+		catch (IOException | NoSolutionPossibleException e)
 		{
 			e.printStackTrace();
 		}

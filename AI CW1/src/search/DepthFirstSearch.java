@@ -3,8 +3,11 @@
  */
 package search;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -34,7 +37,7 @@ public class DepthFirstSearch extends Search
 		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
 		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
 
-		int nodeCounter = 1;
+		int nodeCounter = 0;
 		boolean goalStateFound = false;
 
 		while (!(goalStateFound))
@@ -46,14 +49,22 @@ public class DepthFirstSearch extends Search
 				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
 				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
 			}
+			
+			if (!(visitedBoardStates.contains(currentBoardState)))
+			{
+				nodeCounter++;
+				visitedBoardStates.add(currentBoardState);
+			}
+			
+//			System.out.println(currentBoardState);
+//			System.out.println(nodeCounter);
 
-			visitedBoardStates.add(currentBoardState);
 
 			ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
 			ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
 			
-			nodeCounter = nodeCounter + nextMoves.size();
 
+			
 			if (nextMoves.isEmpty())
 			{
 				currentNode = moveUpToParent(currentNode);
@@ -66,6 +77,46 @@ public class DepthFirstSearch extends Search
 		}
 		return new GameResult(false, null, nodeCounter, 0);
 	}
+	
+//	public static GameResult altDepthFirst(BoardState initBoardState)
+//	{
+//		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+//		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
+//		Deque<Tree<BoardState>> fringe = new ArrayDeque<Tree<BoardState>>();
+//
+//		int nodeCounter = 0;
+//		boolean goalStateFound = false;
+//
+//		fringe.addFirst(new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>()));
+//		BoardState currentBoardState;
+//
+//		while ((!(goalStateFound) || !(fringe.isEmpty())))
+//		{
+//			currentNode = fringe.removeFirst();
+//			currentBoardState = currentNode.getVal();
+////			System.out.println(currentBoardState);
+////			System.out.println(nodeCounter);
+//
+//			if (currentBoardState.isGoalState())
+//			{
+//				goalStateFound = true;
+//				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
+//				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
+//			}
+//			else
+//			{
+//				visitedBoardStates.add(currentBoardState);
+//				nodeCounter++;
+//				ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
+//				ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates);
+//				for (Tree<BoardState> move: nextMoves)
+//				{
+//					fringe.addFirst(move);
+//				}
+//			}
+//		}
+//		return new GameResult(false, null, nodeCounter, 0);
+//	}
 
 	/**
 	 * @param nextMoves
@@ -73,10 +124,10 @@ public class DepthFirstSearch extends Search
 	 */
 	private static Tree<BoardState> expandRandomChild(ArrayList<Tree<BoardState>> nextMoves)
 	{
-		Tree<BoardState> searchTree;
+		Tree<BoardState> currentNode;
 		Random rand = new Random();
-		searchTree = nextMoves.get(rand.nextInt(nextMoves.size())); //Picks a random element out of the list of next moves
-		return searchTree;
+		currentNode = nextMoves.get(rand.nextInt(nextMoves.size())); //Picks a random element out of the list of next moves
+		return currentNode;
 	}
 
 	/**
@@ -100,11 +151,13 @@ public class DepthFirstSearch extends Search
 	private static ArrayList<Tree<BoardState>> filterOutSeenStates(Tree<BoardState> currentNode, ArrayList<Tree<BoardState>> possibleMoves, HashSet<BoardState> visitedBoardStates)
 	{
 		ArrayList<Tree<BoardState>> nextMoves = currentNode.getChildren();
-		for (Tree<BoardState> bState : possibleMoves)
+		nextMoves.clear();
+		for (Tree<BoardState> possibleMove : possibleMoves)
 		{
-			if (!(visitedBoardStates.contains(bState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
+			BoardState succesorBState = possibleMove.getVal();
+			if (!(visitedBoardStates.contains(succesorBState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
 			{
-				nextMoves.add(new Tree<BoardState>(bState.getVal(), currentNode, new ArrayList<Tree<BoardState>>()));
+				nextMoves.add(new Tree<BoardState>(succesorBState, currentNode, new ArrayList<Tree<BoardState>>()));
 			}
 		}
 		return nextMoves;

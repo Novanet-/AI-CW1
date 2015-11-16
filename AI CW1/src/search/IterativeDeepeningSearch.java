@@ -3,6 +3,7 @@
  */
 package search;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -21,6 +22,7 @@ public class IterativeDeepeningSearch extends Search
 
 	static int	maxLevel;
 	static int	currentLevel;
+	HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
 
 
 	/**
@@ -103,7 +105,7 @@ public class IterativeDeepeningSearch extends Search
 				if (currentLevel < maxDepth)
 				{
 					currentLevel++;
-					nodeCounter++; 
+					nodeCounter++;
 					currentNode = expandRandomChild(nextMoves);
 				}
 				else
@@ -121,6 +123,48 @@ public class IterativeDeepeningSearch extends Search
 		}
 		return new GameResult(false, null, nodeCounter, currentLevel);
 	}
+
+
+//	public GameResult altIterativeDeepening(BoardState initBoardState)
+//	{
+//		int depth = 0;
+//		boolean goalStateFound = false;
+//		Tree<BoardState> rootNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+//		while (!(goalStateFound))
+//		{
+//			GameResult found = altDFS(rootNode, depth);
+//			if (found != null)
+//			{
+//				return found;
+//			}
+//		}
+//		return null;
+//	}
+
+
+//public boolean altDFS(Tree<BoardState> node, int depth)
+//{
+//    BoardState currentBoardState = node.getVal();
+//    if (!(visitedBoardStates.contains(currentBoardState)))
+//    {
+//    	visitedBoardStates.add(currentBoardState);
+//    }
+//	if ((depth == 0) && (currentBoardState.isGoalState()))
+//	{
+//        return true;
+//	}
+//    else if (depth > 0)
+//    {
+//    	ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(node);
+//    	ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(node, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current node
+//    	node.setChildren(nextMoves);
+//        for (Tree<BoardState> children : node.getChildren())
+//            found = altDFS(child, depth−1)
+//            if found ≠ null
+//                return true;
+//    }
+//    return null
+//}
 
 
 	/**
