@@ -3,11 +3,12 @@ package game.board;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import game.Game;
 import game.piece.Agent;
 import game.piece.Block;
 import game.piece.PiecePosition;
+import search.Node;
 import utilities.Pair;
-import utilities.Tree;
 
 public class BoardState
 {
@@ -55,9 +56,9 @@ public class BoardState
 		}
 
 		return equalBoardState;
-//		return this.toString().equals(((BoardState) obj).toString());
+		//		return this.toString().equals(((BoardState) obj).toString());
 	}
-	
+
 
 	/**
 	 * Generates a graphical representation of the BoardState, where empty tiles are '-', blocks are dentoed by their
@@ -123,9 +124,9 @@ public class BoardState
 	 * 
 	 * @return An ArrayList of all possible agent moves
 	 */
-	public ArrayList<Tree<BoardState>> generatePossibleMoves(Tree<BoardState> currentNode)
+	public ArrayList<Node> generatePossibleMoves(Node currentNode)
 	{
-		ArrayList<Tree<BoardState>> validMoves = new ArrayList<Tree<BoardState>>();
+		ArrayList<Node> validMoves = new ArrayList<Node>();
 		BoardState boardStateCopy = this.copy();
 		PiecePosition initAgent = new PiecePosition(new Pair<Integer, Integer>(boardStateCopy.getAgent().getPosition().x(), boardStateCopy.getAgent().getPosition().y()));
 		PiecePosition boardStateProbe = boardStateCopy.getAgent().getPosition();
@@ -159,7 +160,7 @@ public class BoardState
 				Agent newAgent = boardStateCopy.getAgent().copy();
 				newAgent.getPosition().setPosition(new Pair<Integer, Integer>(boardStateProbe.x(), boardStateProbe.y()));
 				BoardState validMove = new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe);
-				validMoves.add(new Tree<BoardState>(validMove, currentNode, new ArrayList<Tree<BoardState>>()));
+				validMoves.add(new Node(validMove, currentNode, new ArrayList<Node>()));
 			}
 
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));
@@ -197,26 +198,30 @@ public class BoardState
 	 */
 	public boolean isGoalState()
 	{
-		Block lastBlock = this.getBlocks().get(getBlocks().size() - 1);
-		if (blockOnTable(lastBlock))
-		{
-
-			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
-			{
-				Block smallerBlock = getBlocks().get(i);
-				if ((smallerBlock.getPosition().x() == (lastBlock.getPosition().x() - 1)) && (smallerBlock.getPosition().y() == lastBlock.getPosition().y()))
-				{
-					lastBlock = smallerBlock;
-				}
-				else
-				{
-					return false;
-				}
-
-			}
+		//		Block lastBlock = this.getBlocks().get(getBlocks().size() - 1);
+		//		if (blockOnTable(lastBlock))
+		//		{
+		//
+		//			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
+		//			{
+		//				Block smallerBlock = getBlocks().get(i);
+		//				if ((smallerBlock.getPosition().x() == (lastBlock.getPosition().x() - 1)) && (smallerBlock.getPosition().y() == lastBlock.getPosition().y()))
+		//				{
+		//					lastBlock = smallerBlock;
+		//				}
+		//				else
+		//				{
+		//					return false;
+		//				}
+		//
+		//			}
+		//			return true;
+		//		}
+		//		return false;
+		if (this.equals(Game.goalState))
 			return true;
-		}
-		return false;
+		else
+			return false;
 	}
 
 
@@ -248,7 +253,7 @@ public class BoardState
 		int hash = 5;
 		hash = (int) (89 * hash + ((this.getBoard().getWidth()) + (this.getBoard().getHeight())));
 		hash = 89 * hash + ((this.getAgent().getPosition().x()) + (this.getAgent().getPosition().y()));
-		for (Block b: this.getBlocks())
+		for (Block b : this.getBlocks())
 		{
 			hash = (89 * hash + (b.getPosition().x()) + (b.getPosition().y()));
 

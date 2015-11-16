@@ -1,6 +1,5 @@
 package search;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,16 +7,17 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
+import game.Game;
 import game.GameResult;
 import game.board.BoardState;
 import game.piece.Block;
-import utilities.Tree;
+import game.piece.BoardPiece;
 
 public class Heuristic
 {
 
-	private static HashMap<Tree<BoardState>, Integer>	gScore;
-	private static HashMap<Tree<BoardState>, Integer>	fScore;
+	private static HashMap<Node, Integer>	gScore;
+	private static HashMap<Node, Integer>	fScore;
 	private static Integer								gScoreDefault	= Integer.MAX_VALUE;
 	private static Integer								fScoreDefault	= Integer.MAX_VALUE;
 
@@ -40,21 +40,21 @@ public class Heuristic
 
 		EstimatedCostComparator comparator = new Heuristic.EstimatedCostComparator();
 
-		HashSet<Tree<BoardState>> nodesExplored = new HashSet<Tree<BoardState>>(); // The set of nodes already explored
-		PriorityQueue<Tree<BoardState>> fringe = new PriorityQueue<Tree<BoardState>>(comparator); //The potential neigbours to be explored
+		HashSet<Node> nodesExplored = new HashSet<Node>(); // The set of nodes already explored
+		PriorityQueue<Node> fringe = new PriorityQueue<Node>(comparator); //The potential neigbours to be explored
 
-		Tree<BoardState> rootNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+		Node rootNode = new Node(initBoardState, null, new ArrayList<Node>());
 		fringe.add(rootNode);// The set of tentative nodes to be evaluated, initially containing the start node
 
-		gScore = new HashMap<Tree<BoardState>, Integer>();
+		gScore = new HashMap<Node, Integer>();
 		gScore.put(rootNode, 0); // Cost from start along best known path.
 
-		fScore = new HashMap<Tree<BoardState>, Integer>();
+		fScore = new HashMap<Node, Integer>();
 		fScore.put(rootNode, gScore.get(rootNode) + estimateCostToGoal(rootNode)); //Estimated cost from the root node to a goal state
 
 		while (!(fringe.isEmpty()))
 		{
-			Tree<BoardState> currentNode = fringe.peek();
+			Node currentNode = fringe.peek();
 			if (currentNode.getVal().isGoalState())
 			{
 				Stack<BoardState> solutionPath = Search.calculateSolutionPath(currentNode);
@@ -65,10 +65,10 @@ public class Heuristic
 			nodesExplored.add(currentNode);
 
 			nodeCounter++;
-			ArrayList<Tree<BoardState>> possibleMoves = currentNode.getVal().generatePossibleMoves(currentNode);
-			currentNode.setChildren(new ArrayList<Tree<BoardState>>(possibleMoves));
+			ArrayList<Node> possibleMoves = currentNode.getVal().generatePossibleMoves(currentNode);
+			currentNode.setChildren(new ArrayList<Node>(possibleMoves));
 
-			for (Tree<BoardState> childNode : currentNode.getChildren())
+			for (Node childNode : currentNode.getChildren())
 			{
 				if (nodesExplored.contains(childNode))
 				{
@@ -80,10 +80,10 @@ public class Heuristic
 				{
 					fringe.add(childNode);
 				}
-				else if (tentativeGScore >= childNodeGScore)
-				{
-					break; // This is not a better path.
-				}
+//				else if (tentativeGScore >= childNodeGScore)
+//				{
+//					break; // This is not a better path.
+//				}
 
 				// Record the current path selected
 				gScore.put(childNode, tentativeGScore);
@@ -96,35 +96,51 @@ public class Heuristic
 	}
 
 
-	private static Integer estimateCostToGoal(Tree<BoardState> rootNode)
+	private static Integer estimateCostToGoal(Node rootNode)
 	{
 		int cost = 0;
 
-		ArrayList<Block> letterSortedBlockArray = rootNode.getVal().getBlocks();
-		ArrayList<Block> columnSortedBlockArray = new ArrayList<Block>();
-		columnSortedBlockArray.addAll(letterSortedBlockArray);
-		columnSortedBlockArray.sort((o1, o2) -> o1.getPosition().y() - o2.getPosition().y());
-		Block leftBlock = columnSortedBlockArray.get(0);
-		Block middleBlock = columnSortedBlockArray.get(1);
-		Block rightBlock = columnSortedBlockArray.get(2);
-		cost += Math.abs(middleBlock.getPosition().y() - leftBlock.getPosition().y());
-		cost += Math.abs(middleBlock.getPosition().y() - rightBlock.getPosition().y());
-		Rectangle board = rootNode.getVal().getBoard();
-		Block cBlock = letterSortedBlockArray.get(2);
-		Block bBlock = letterSortedBlockArray.get(1);
-		Block aBlock = letterSortedBlockArray.get(0);
-		cost += (board.getHeight() - 1) - (cBlock.getPosition().x());
-		cost += (board.getHeight() - 2) - (bBlock.getPosition().x());
-		cost += (board.getHeight() - 3) - (aBlock.getPosition().x());
+//		ArrayList<Block> letterSortedBlockArray = rootNode.getVal().getBlocks();
+//		ArrayList<Block> columnSortedBlockArray = new ArrayList<Block>();
+//		columnSortedBlockArray.addAll(letterSortedBlockArray);
+//		columnSortedBlockArray.sort((o1, o2) -> o1.getPosition().y() - o2.getPosition().y());
+//		Block leftBlock = columnSortedBlockArray.get(0);
+//		Block middleBlock = columnSortedBlockArray.get(1);
+//		Block rightBlock = columnSortedBlockArray.get(2);
+//		cost += Math.abs(middleBlock.getPosition().y() - leftBlock.getPosition().y());
+//		cost += Math.abs(middleBlock.getPosition().y() - rightBlock.getPosition().y());
+//		Rectangle board = rootNode.getVal().getBoard();
+//		Block cBlock = letterSortedBlockArray.get(2);
+//		Block bBlock = letterSortedBlockArray.get(1);
+//		Block aBlock = letterSortedBlockArray.get(0);
+//		cost += (board.getHeight() - 1) - (cBlock.getPosition().x());
+//		cost += (board.getHeight() - 2) - (bBlock.getPosition().x());
+//		cost += (board.getHeight() - 3) - (aBlock.getPosition().x());
+		
+		ArrayList<Block> currentBlockConfig = rootNode.getVal().getBlocks();
+		ArrayList<Block> targetBlockConfig = Game.goalState.getBlocks();
+		for (int i = 0; i < currentBlockConfig.size(); i++)
+		{
+			cost += manhattanDistance(currentBlockConfig.get(i), targetBlockConfig.get(i)); 
+		}
+		
+//		cost += manhattanDistance(rootNode.getVal().getAgent(), Game.goalState.getAgent());
 
 		return cost;
 	}
 
-	static class EstimatedCostComparator implements Comparator<Tree<BoardState>>
+	private static int manhattanDistance(BoardPiece currentPiece, BoardPiece targetPiece)
+	{
+		int xDistance = Math.abs(currentPiece.getPosition().x() - targetPiece.getPosition().x());
+		int yDistance = Math.abs(currentPiece.getPosition().y() - targetPiece.getPosition().y());
+		return xDistance + yDistance;
+	}
+
+	static class EstimatedCostComparator implements Comparator<Node>
 	{
 
 		@Override
-		public int compare(Tree<BoardState> o1, Tree<BoardState> o2)
+		public int compare(Node o1, Node o2)
 		{
 			Integer o1Cost = fScore.get(o1) == null ? fScoreDefault : fScore.get(o1);
 			Integer o2Cost = fScore.get(o2) == null ? fScoreDefault : fScore.get(o2);

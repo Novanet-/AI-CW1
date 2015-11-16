@@ -3,7 +3,6 @@
  */
 package search;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -11,7 +10,6 @@ import java.util.Stack;
 
 import game.GameResult;
 import game.board.BoardState;
-import utilities.Tree;
 
 /**
  * @author Will
@@ -68,7 +66,7 @@ public class IterativeDeepeningSearch extends Search
 	private static GameResult depthFirst(BoardState initBoardState, int maxDepth) throws NoSolutionPossibleException
 	{
 		int currentLevel = 0;
-		Tree<BoardState> currentNode = new Tree<BoardState>(initBoardState, null, new ArrayList<Tree<BoardState>>());
+		Node currentNode = new Node(initBoardState, null, new ArrayList<Node>());
 		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
 
 		int nodeCounter = 1;
@@ -86,8 +84,8 @@ public class IterativeDeepeningSearch extends Search
 
 			visitedBoardStates.add(currentBoardState);
 
-			ArrayList<Tree<BoardState>> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
-			ArrayList<Tree<BoardState>> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
+			ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
+			ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
 
 			//nodeCounter = nodeCounter + nextMoves.size();
 
@@ -171,9 +169,9 @@ public class IterativeDeepeningSearch extends Search
 	 * @param nextMoves
 	 * @return
 	 */
-	private static Tree<BoardState> expandRandomChild(ArrayList<Tree<BoardState>> nextMoves)
+	private static Node expandRandomChild(ArrayList<Node> nextMoves)
 	{
-		Tree<BoardState> searchTree;
+		Node searchTree;
 		Random rand = new Random();
 		searchTree = nextMoves.get(rand.nextInt(nextMoves.size())); //Picks a random element out of the list of next moves
 		return searchTree;
@@ -185,7 +183,7 @@ public class IterativeDeepeningSearch extends Search
 	 * @return
 	 * @throws NoSolutionPossibleException
 	 */
-	private static Tree<BoardState> moveUpToParent(Tree<BoardState> currentNode) throws NoSolutionPossibleException
+	private static Node moveUpToParent(Node currentNode) throws NoSolutionPossibleException
 	{
 		if (!(currentNode.getParent() == null)) //If there are no valid moves, and the current node has  parent, move up to the parent
 		{
@@ -199,17 +197,17 @@ public class IterativeDeepeningSearch extends Search
 	}
 
 
-	private static ArrayList<Tree<BoardState>> filterOutSeenStates(Tree<BoardState> currentNode, ArrayList<Tree<BoardState>> possibleMoves,
+	private static ArrayList<Node> filterOutSeenStates(Node currentNode, ArrayList<Node> possibleMoves,
 			HashSet<BoardState> visitedBoardStates)
 	{
-		ArrayList<Tree<BoardState>> nextMoves = currentNode.getChildren();
+		ArrayList<Node> nextMoves = currentNode.getChildren();
 		nextMoves.clear();
-		for (Tree<BoardState> possibleMove : possibleMoves)
+		for (Node possibleMove : possibleMoves)
 		{
 			BoardState succesorBState = possibleMove.getVal();
 			if (!(visitedBoardStates.contains(succesorBState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
 			{
-				nextMoves.add(new Tree<BoardState>(succesorBState, currentNode, new ArrayList<Tree<BoardState>>()));
+				nextMoves.add(new Node(succesorBState, currentNode, new ArrayList<Node>()));
 			}
 		}
 		return nextMoves;

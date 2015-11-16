@@ -30,7 +30,7 @@ public class Game
 {
 
 	private BoardState			boardstate;
-	private static BoardState	goalState;
+	public static BoardState	goalState;
 
 
 	/**
@@ -122,7 +122,7 @@ public class Game
 						dfsAgentAccumulator += dfsGameResult.getAgentMoves();
 						printResult(dfsGameResult);
 					}
-//					break;
+					//					break;
 
 				case BREADTH_FIRST:
 					for (i = 0; i < iterations; i++)
@@ -162,14 +162,14 @@ public class Game
 
 			if (csvFile)
 			{
-				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + dfsNodesAccumulator / iterations + ","
-						+ dfsAgentAccumulator / iterations));
-				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + bfsNodesAccumulator / iterations + ","
-						+ bfsAgentAccumulator / iterations));
-				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + idNodesAccumulator / iterations + ","
-						+ idAgentAccumulator / iterations));
-				System.out.println((game.getBoardstate().getBoard().getWidth() + "," + game.getBoardstate().getBoard().getHeight() + "," + heurNodesAccumulator / iterations + ","
-						+ heurAgentAccumulator / iterations));
+				System.out.println(((int) game.getBoardstate().getBoard().getWidth()) + "," + ((int) game.getBoardstate().getBoard().getHeight()) + ","
+						+ dfsNodesAccumulator / iterations + "," + dfsAgentAccumulator / iterations);
+				System.out.println(((int) game.getBoardstate().getBoard().getWidth()) + "," + ((int) game.getBoardstate().getBoard().getHeight()) + ","
+						+ bfsNodesAccumulator / iterations + "," + bfsAgentAccumulator / iterations);
+				System.out.println(((int) game.getBoardstate().getBoard().getWidth()) + "," + ((int) game.getBoardstate().getBoard().getHeight()) + ","
+						+ idNodesAccumulator / iterations + "," + idAgentAccumulator / iterations);
+				System.out.println(((int) game.getBoardstate().getBoard().getWidth()) + "," + ((int) game.getBoardstate().getBoard().getHeight()) + ","
+						+ heurNodesAccumulator / iterations + "," + heurAgentAccumulator / iterations);
 			}
 
 		}

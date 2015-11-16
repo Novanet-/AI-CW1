@@ -15,13 +15,13 @@ import game.piece.Agent;
 import game.piece.Block;
 import game.piece.PiecePosition;
 import game.piece.PieceType;
+import search.Node;
 import utilities.Pair;
-import utilities.Tree;
 
 public class TreeTest
 {
 
-	Tree<BoardState> tree1, tree2;
+	Node tree1, tree2;
 	BoardState board1, board2;
 
 
@@ -41,8 +41,8 @@ public class TreeTest
 		Agent agent2 = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 1)));
 		board2 = new BoardState(new Rectangle(8, 8), agent2, blocks2);
 		
-		tree1 = new Tree<BoardState>(board1, null, new ArrayList<Tree<BoardState>>());
-		tree2 = new Tree<BoardState>(board2, null, new ArrayList<Tree<BoardState>>());
+		tree1 = new Node(board1, null, new ArrayList<Node>());
+		tree2 = new Node(board2, null, new ArrayList<Node>());
 	}
 
 
