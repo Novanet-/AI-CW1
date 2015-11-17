@@ -136,7 +136,7 @@ public class Game
 				case ITERATIVE_DEEPENING:
 					for (i = 0; i < iterations; i++)
 					{
-						idGameResult = IterativeDeepeningSearch.iterativeDeepening(game.getBoardstate());
+						idGameResult = IterativeDeepeningSearch.altIterativeDeepening(game.getBoardstate());
 						idNodesAccumulator += idGameResult.getNodesExpanded();
 						idAgentAccumulator += idGameResult.getAgentMoves();
 						printResult(idGameResult);

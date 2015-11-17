@@ -30,68 +30,69 @@ public class DepthFirstSearch extends Search
 	 * @throws NoSolutionPossibleException
 	 *             If a goal state can't be reached from the start state
 	 */
-	public static GameResult depthFirst(BoardState initBoardState) throws NoSolutionPossibleException
-	{
-		Node currentNode = new Node(initBoardState, null, new ArrayList<Node>());
-		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
-
-		int nodeCounter = 0;
-		boolean goalStateFound = false;
-
-		while (!(goalStateFound))
-		{
-			BoardState currentBoardState = currentNode.getVal();
-			if (currentBoardState.isGoalState())
-			{
-				goalStateFound = true;
-				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
-			}
-			
-			if (!(visitedBoardStates.contains(currentBoardState)))
-			{
-				nodeCounter++;
-				visitedBoardStates.add(currentBoardState);
-			}
-			
-//			System.out.println(currentBoardState);
-//			System.out.println(nodeCounter);
-
-
-			ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
-			ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates); //nextMoves: pointer to the children of the current ndoe
-			
-
-			
-			if (nextMoves.isEmpty())
-			{
-				currentNode = moveUpToParent(currentNode);
-			}
-			else
-			{
-				currentNode = expandRandomChild(nextMoves);
-			}
-
-		}
-		return new GameResult(false, null, nodeCounter, 0);
-	}
+//	public static GameResult depthFirst(BoardState initBoardState) throws NoSolutionPossibleException
+//	{
+//		Node currentNode = new Node(initBoardState, null, new ArrayList<Node>());
+//		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
+//
+//		int nodeCounter = 0;
+//		boolean goalStateFound = false;
+//
+//		while (!(goalStateFound))
+//		{
+//			BoardState currentBoardState = currentNode.getVal();
+//			if (currentBoardState.isGoalState())
+//			{
+//				goalStateFound = true;
+//				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
+//				return new GameResult(true, solutionPath, visitedBoardStates.size(), solutionPath.size());
+//			}
+//			
+//			if (visitedBoardStates.add(currentBoardState))
+//			{
+//				nodeCounter++;
+//			}
+//			
+////			System.out.println(currentBoardState);
+////			System.out.println(nodeCounter);
+//
+//
+//			ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
+//			ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates, nodeCounter); //nextMoves: pointer to the children of the current ndoe
+//			
+//
+//			
+//			if (nextMoves.isEmpty())
+//			{
+//				currentNode = moveUpToParent(currentNode);
+//			}
+//			else
+//			{
+//				currentNode = expandRandomChild(nextMoves);
+//			}
+//
+//		}
+//		return new GameResult(false, null, nodeCounter, 0);
+//	}
 	
 	public static GameResult altDepthFirst(BoardState initBoardState)
-	{
-		Node currentNode = new Node(initBoardState, null, new ArrayList<Node>());
+	{	
+		int currentLevel = 0;
+		Node currentNode = new Node(initBoardState, null, new ArrayList<Node>(), currentLevel);
 		HashSet<BoardState> visitedBoardStates = new HashSet<BoardState>();
 		Deque<Node> fringe = new ArrayDeque<Node>();
 
 		int nodeCounter = 0;
 		boolean goalStateFound = false;
 
-		fringe.addFirst(new Node(initBoardState, null, new ArrayList<Node>()));
+		fringe.addFirst(currentNode);
 		BoardState currentBoardState;
 
 		while ((!(goalStateFound) || !(fringe.isEmpty())))
 		{
 			currentNode = fringe.removeFirst();
 			currentBoardState = currentNode.getVal();
+			currentLevel = currentNode.getDepth();
 //			System.out.println(currentBoardState);
 //			System.out.println(nodeCounter);
 
@@ -99,14 +100,16 @@ public class DepthFirstSearch extends Search
 			{
 				goalStateFound = true;
 				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
+				return new GameResult(true, solutionPath, visitedBoardStates.size(), solutionPath.size());
 			}
 			else
 			{
-				visitedBoardStates.add(currentBoardState);
-				nodeCounter++;
-				ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode);
-				ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates);
+				if (visitedBoardStates.add(currentBoardState))
+				{
+					nodeCounter++;
+				}
+				ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode, currentLevel);
+				ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates, currentLevel);
 				while (!(nextMoves.isEmpty()))
 				{
 					Random rand = new Random();
@@ -148,7 +151,7 @@ public class DepthFirstSearch extends Search
 		return currentNode;
 	}
 	
-	private static ArrayList<Node> filterOutSeenStates(Node currentNode, ArrayList<Node> possibleMoves, HashSet<BoardState> visitedBoardStates)
+	private static ArrayList<Node> filterOutSeenStates(Node currentNode, ArrayList<Node> possibleMoves, HashSet<BoardState> visitedBoardStates, int currentLevel)
 	{
 		ArrayList<Node> nextMoves = currentNode.getChildren();
 		nextMoves.clear();
@@ -157,7 +160,7 @@ public class DepthFirstSearch extends Search
 			BoardState succesorBState = possibleMove.getVal();
 			if (!(visitedBoardStates.contains(succesorBState))) //If one of the possible moves has already been visited, then do not add it to nextMoves
 			{
-				nextMoves.add(new Node(succesorBState, currentNode, new ArrayList<Node>()));
+				nextMoves.add(new Node(succesorBState, currentNode, new ArrayList<Node>(), currentLevel + 1));
 			}
 		}
 		return nextMoves;

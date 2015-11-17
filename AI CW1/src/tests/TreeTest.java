@@ -41,8 +41,8 @@ public class TreeTest
 		Agent agent2 = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 1)));
 		board2 = new BoardState(new Rectangle(8, 8), agent2, blocks2);
 		
-		tree1 = new Node(board1, null, new ArrayList<Node>());
-		tree2 = new Node(board2, null, new ArrayList<Node>());
+		tree1 = new Node(board1, null, new ArrayList<Node>(), 0);
+		tree2 = new Node(board2, null, new ArrayList<Node>(), 0);
 	}
 
 

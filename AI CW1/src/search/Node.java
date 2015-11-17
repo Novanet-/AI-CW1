@@ -10,6 +10,7 @@ public class Node
 	private BoardState		val;
 	private Node			parent;
 	private ArrayList<Node>	children;
+	private int				depth;
 
 
 	/**
@@ -17,12 +18,13 @@ public class Node
 	 * @param parent
 	 * @param children
 	 */
-	public Node(BoardState val, Node parent, ArrayList<Node> children)
+	public Node(BoardState val, Node parent, ArrayList<Node> children, int depth)
 	{
 		super();
 		this.val = val;
 		this.parent = parent;
 		this.setChildren(children);
+		this.setDepth(depth);
 	}
 
 
@@ -88,6 +90,9 @@ public class Node
 				}
 			}
 		}
+		
+		if (!(this.getDepth() == ((Node) obj).getDepth()))
+			treesEqual = false;
 
 		return treesEqual;
 	}
@@ -101,7 +106,7 @@ public class Node
 		{
 			childVals.add(children.getVal());
 		}
-		return new String("Node: \n" + this.getVal() + "Parent: \n" + this.getParent().getVal() + "Children: \n" + childVals);
+		return new String("\nNode: \n" + this.getVal() + "Parent: \n" + this.getParent().getVal() + "Children: \n" + childVals + "\nDepth: \n" + this.getDepth());
 	}
 
 
@@ -109,15 +114,29 @@ public class Node
 	public int hashCode()
 	{
 		int hash = 3;
-//		hash = 37 * hash + (this.getVal().hashCode());
-//		hash = 37 * hash + (this.getParent() == null ? 0 : this.getParent().getVal().hashCode());
-//		for (Node c : this.getChildren())
-//		{
-//			hash = (37 * hash + (c.getVal().hashCode()));
-//
-//		}
-//		return hash;
-		return hash * this.getVal().hashCode();
+		//		hash = 37 * hash + (this.getVal().hashCode());
+		//		hash = 37 * hash + (this.getParent() == null ? 0 : this.getParent().getVal().hashCode());
+		//		for (Node c : this.getChildren())
+		//		{
+		//			hash = (37 * hash + (c.getVal().hashCode()));
+		//
+		//		}
+		//		return hash;
+		hash = 17 * hash + this.getVal().hashCode();
+		hash = 17 * hash + this.getDepth();
+		return hash;
+	}
+
+
+	public int getDepth()
+	{
+		return depth;
+	}
+
+
+	public void setDepth(int depth)
+	{
+		this.depth = depth;
 	}
 
 }

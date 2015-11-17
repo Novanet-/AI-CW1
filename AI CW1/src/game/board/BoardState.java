@@ -121,10 +121,11 @@ public class BoardState
 	/**
 	 * Generate all possible moves of the agent, where a possible move is one that does not take it out of the bounds of
 	 * the board
+	 * @param currentLevel 
 	 * 
 	 * @return An ArrayList of all possible agent moves
 	 */
-	public ArrayList<Node> generatePossibleMoves(Node currentNode)
+	public ArrayList<Node> generatePossibleMoves(Node currentNode, int currentDepth)
 	{
 		ArrayList<Node> validMoves = new ArrayList<Node>();
 		BoardState boardStateCopy = this.copy();
@@ -145,7 +146,7 @@ public class BoardState
 				blockProbe.add(b.copy());
 			}
 
-			//Adjust the agent by each cardinal direciton and check for validity
+			//Adjust the agent by each cardinal direction and check for validity
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(boardStateProbe.x() + moveVector.getLeft(), boardStateProbe.y() + moveVector.getRight()));
 			if (isPieceInBounds(boardStateProbe))
 			{
@@ -160,7 +161,7 @@ public class BoardState
 				Agent newAgent = boardStateCopy.getAgent().copy();
 				newAgent.getPosition().setPosition(new Pair<Integer, Integer>(boardStateProbe.x(), boardStateProbe.y()));
 				BoardState validMove = new BoardState(boardStateCopy.getBoard(), newAgent, blockProbe);
-				validMoves.add(new Node(validMove, currentNode, new ArrayList<Node>()));
+				validMoves.add(new Node(validMove, currentNode, new ArrayList<Node>(), currentDepth + 1));
 			}
 
 			boardStateProbe.setPosition(new Pair<Integer, Integer>(initAgent.x(), initAgent.y()));

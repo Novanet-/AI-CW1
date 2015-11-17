@@ -37,13 +37,14 @@ public class Heuristic
 	public static GameResult heuristic(BoardState initBoardState)
 	{
 		int nodeCounter = 0;
+		int currentDepth = 0;
 
 		EstimatedCostComparator comparator = new Heuristic.EstimatedCostComparator();
 
 		HashSet<Node> nodesExplored = new HashSet<Node>(); // The set of nodes already explored
 		PriorityQueue<Node> fringe = new PriorityQueue<Node>(comparator); //The potential neigbours to be explored
 
-		Node rootNode = new Node(initBoardState, null, new ArrayList<Node>());
+		Node rootNode = new Node(initBoardState, null, new ArrayList<Node>(), 0);
 		fringe.add(rootNode);// The set of tentative nodes to be evaluated, initially containing the start node
 
 		gScore = new HashMap<Node, Integer>();
@@ -55,17 +56,24 @@ public class Heuristic
 		while (!(fringe.isEmpty()))
 		{
 			Node currentNode = fringe.peek();
+			
+			currentDepth = currentNode.getDepth();
 			if (currentNode.getVal().isGoalState())
 			{
 				Stack<BoardState> solutionPath = Search.calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
+				return new GameResult(true, solutionPath, nodeCounter, currentDepth);
 			}
+			
+			
 
 			fringe.remove(currentNode);
-			nodesExplored.add(currentNode);
-
-			nodeCounter++;
-			ArrayList<Node> possibleMoves = currentNode.getVal().generatePossibleMoves(currentNode);
+			
+			if (nodesExplored.add(currentNode))
+			{
+				nodeCounter++;
+			}
+			
+			ArrayList<Node> possibleMoves = currentNode.getVal().generatePossibleMoves(currentNode, currentDepth);
 			currentNode.setChildren(new ArrayList<Node>(possibleMoves));
 
 			for (Node childNode : currentNode.getChildren())
@@ -75,7 +83,7 @@ public class Heuristic
 					break; // Ignore neighbours which are already explored
 				}
 				Integer tentativeGScore = (gScore.get(currentNode) == null ? gScoreDefault : gScore.get(currentNode)) + 1;// Length of the path from the root node to the current node
-				Integer childNodeGScore = gScore.get(childNode) == null ? gScoreDefault : gScore.get(childNode); //Length of the path from the root node to the child node
+//				Integer childNodeGScore = gScore.get(childNode) == null ? gScoreDefault : gScore.get(childNode); //Length of the path from the root node to the child node
 				if (!(fringe.contains(childNode)))// Discover a new node
 				{
 					fringe.add(childNode);
