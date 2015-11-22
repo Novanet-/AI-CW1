@@ -110,8 +110,11 @@ public class DepthFirstSearch extends Search
 				}
 				ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode, currentLevel);
 				ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates, currentLevel);
+//				Random rand = new Random();
+//				int randInt;
 				while (!(nextMoves.isEmpty()))
 				{
+//					randInt = rand.nextInt(nextMoves.size());
 					fringe.addFirst(nextMoves.remove(0));
 				}
 			}

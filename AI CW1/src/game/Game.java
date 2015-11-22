@@ -38,20 +38,20 @@ public class Game
 	 */
 	public Game()
 	{
-		Rectangle board = new Rectangle(5, 5);
+		Rectangle board = new Rectangle(7, 7);
 		ArrayList<Block> pieces = new ArrayList<Block>();
-		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 1))));
-		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 2))));
-		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 3))));
-		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(4, 4)));
+		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 3))));
+		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 4))));
+		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 5))));
+		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(6, 6)));
 		boardstate = new BoardState(board, agent, pieces);
 
-		Rectangle boardG = new Rectangle(5, 5);
+		Rectangle boardG = new Rectangle(7, 7);
 		ArrayList<Block> piecesG = new ArrayList<Block>();
-		piecesG.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2, 2))));
-		piecesG.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 2))));
-		piecesG.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 2))));
-		Agent agentG = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(4, 4)));
+		piecesG.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 4))));
+		piecesG.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(5, 4))));
+		piecesG.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 4))));
+		Agent agentG = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(6, 6)));
 		goalState = new BoardState(boardG, agentG, piecesG);
 	}
 
@@ -122,7 +122,7 @@ public class Game
 						dfsAgentAccumulator += dfsGameResult.getAgentMoves();
 						printResult(dfsGameResult);
 					}
-					//					break;
+					break;
 
 				case BREADTH_FIRST:
 					for (i = 0; i < iterations; i++)

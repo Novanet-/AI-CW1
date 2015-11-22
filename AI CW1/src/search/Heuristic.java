@@ -61,12 +61,14 @@ public class Heuristic
 			if (currentNode.getVal().isGoalState())
 			{
 				Stack<BoardState> solutionPath = Search.calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodeCounter, currentDepth);
+				return new GameResult(true, solutionPath, nodesExplored.size(), solutionPath.size());
 			}
 			
 			
 
-			fringe.remove(currentNode);
+			currentNode = fringe.remove();
+			
+			System.out.println(currentNode.getVal());
 			
 			if (nodesExplored.add(currentNode))
 			{
@@ -96,6 +98,8 @@ public class Heuristic
 				// Record the current path selected
 				gScore.put(childNode, tentativeGScore);
 				fScore.put(childNode, gScore.get(childNode) + estimateCostToGoal(childNode));
+				System.out.println(tentativeGScore);
+				System.out.println(gScore.get(childNode) + estimateCostToGoal(childNode));
 			}
 		}
 
@@ -108,23 +112,7 @@ public class Heuristic
 	{
 		int cost = 0;
 
-//		ArrayList<Block> letterSortedBlockArray = rootNode.getVal().getBlocks();
-//		ArrayList<Block> columnSortedBlockArray = new ArrayList<Block>();
-//		columnSortedBlockArray.addAll(letterSortedBlockArray);
-//		columnSortedBlockArray.sort((o1, o2) -> o1.getPosition().y() - o2.getPosition().y());
-//		Block leftBlock = columnSortedBlockArray.get(0);
-//		Block middleBlock = columnSortedBlockArray.get(1);
-//		Block rightBlock = columnSortedBlockArray.get(2);
-//		cost += Math.abs(middleBlock.getPosition().y() - leftBlock.getPosition().y());
-//		cost += Math.abs(middleBlock.getPosition().y() - rightBlock.getPosition().y());
-//		Rectangle board = rootNode.getVal().getBoard();
-//		Block cBlock = letterSortedBlockArray.get(2);
-//		Block bBlock = letterSortedBlockArray.get(1);
-//		Block aBlock = letterSortedBlockArray.get(0);
-//		cost += (board.getHeight() - 1) - (cBlock.getPosition().x());
-//		cost += (board.getHeight() - 2) - (bBlock.getPosition().x());
-//		cost += (board.getHeight() - 3) - (aBlock.getPosition().x());
-		
+
 		ArrayList<Block> currentBlockConfig = rootNode.getVal().getBlocks();
 		ArrayList<Block> targetBlockConfig = Game.goalState.getBlocks();
 		for (int i = 0; i < currentBlockConfig.size(); i++)
@@ -132,7 +120,6 @@ public class Heuristic
 			cost += manhattanDistance(currentBlockConfig.get(i), targetBlockConfig.get(i)); 
 		}
 		
-//		cost += manhattanDistance(rootNode.getVal().getAgent(), Game.goalState.getAgent());
 
 		return cost;
 	}

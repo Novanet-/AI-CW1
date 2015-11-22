@@ -44,7 +44,7 @@ public class BreadthFirstSearch extends Search
 			{
 				goalStateFound = true;
 				Stack<BoardState> solutionPath = calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodeCounter, solutionPath.size());
+				return new GameResult(true, solutionPath, visitedBoardStates.size(), solutionPath.size());
 			}
 			else
 			{
