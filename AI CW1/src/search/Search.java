@@ -8,6 +8,8 @@ public class Search
 {
 
 	/**
+	 * Works back from the goal state, up to the start state, to calculate the solution path taken
+	 * 
 	 * @param solutionState
 	 *            The final state of a solution
 	 * @return A stack containing all the board states leading to the solution, minus the start state

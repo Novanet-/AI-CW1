@@ -29,68 +29,40 @@ import utilities.Pair;
 public class Game
 {
 
-	private BoardState			boardstate;
+	private BoardState			startState;
 	public static BoardState	goalState;
 
 
 	/**
-	 * 
+	 * Creates a start state and a goal state for the game
 	 */
 	public Game()
 	{
-		Rectangle board = new Rectangle(7, 7);
+		Rectangle startBoard = new Rectangle(4, 4);
 		ArrayList<Block> pieces = new ArrayList<Block>();
-		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 3))));
-		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 4))));
-		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 5))));
-		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(6, 6)));
-		boardstate = new BoardState(board, agent, pieces);
+		pieces.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 0))));
+		pieces.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 1))));
+		pieces.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 2))));
+		Agent agent = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 3)));
+		startState = new BoardState(startBoard, agent, pieces);
 
-		Rectangle boardG = new Rectangle(7, 7);
+		Rectangle goalBoard = new Rectangle(4, 4);
 		ArrayList<Block> piecesG = new ArrayList<Block>();
-		piecesG.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(4, 4))));
-		piecesG.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(5, 4))));
-		piecesG.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(6, 4))));
-		Agent agentG = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(6, 6)));
-		goalState = new BoardState(boardG, agentG, piecesG);
-	}
-
-
-	public Game(Rectangle board, Agent agent, ArrayList<Block> blocks)
-	{
-
-		boardstate = new BoardState(board, agent, blocks);
+		piecesG.add(new Block("a", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(1, 1))));
+		piecesG.add(new Block("b", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(2, 1))));
+		piecesG.add(new Block("c", PieceType.BLOCK, new PiecePosition(new Pair<Integer, Integer>(3, 1))));
+		Agent agentG = new Agent("agent", PieceType.AGENT, new PiecePosition(new Pair<Integer, Integer>(3, 3)));
+		goalState = new BoardState(goalBoard, agentG, piecesG);
 	}
 
 
 	/**
-	 * Runs the block board game with an initial board state, and a search type used to calcualte the solution
+	 * Menu system for running the game, after a search has been run, adds the results to it's relative accumulator, and
+	 * if the csv toggle has been selected, will print out the average result for each search time when all search runs
+	 * have been finished
 	 * 
-	 * @param initBoardState
-	 * @param goalState
-	 * @param search
-	 * @return
-	 * @throws NoSolutionPossibleException
+	 * @param args
 	 */
-	//	public GameResult runGame(BoardState initBoardState, SearchType search) throws NoSolutionPossibleException
-	//	{
-	//		GameResult gameResult = null;
-	//		switch (search)
-	//		{
-	//			case DEPTH_FIRST:
-	//				gameResult = DepthFirstSearch.depthFirst(initBoardState);
-	//				break;
-	//			case BREADTH_FIRST:
-	//				gameResult = BreadthFirstSearch.breadthFirst(initBoardState);
-	//				break;
-	//			case ITERATIVE_DEEPENING:
-	//				gameResult = IterativeDeepeningSearch.iterativeDeepening(initBoardState);
-	//			default:
-	//				break;
-	//		}
-	//		return gameResult;
-	//	}
-
 	public static void main(String[] args)
 	{
 		Game game = new Game();
@@ -102,8 +74,7 @@ public class Game
 			System.out.println("Select search type: '1. DFS 2. BFS 3. Iterative Deepening 4. Heuristic");
 			int searchTypeIndex = Integer.parseInt(br.readLine());
 			System.out.println("CSV? (y/n)");
-			boolean csvFile = true;
-			;
+			boolean csvFile = br.readLine().equals("y") ? true : false;
 
 			GameResult dfsGameResult = null, bfsGameResult = null, idGameResult = null, heurGameResult = null;
 			SearchType searchType = SearchType.values()[searchTypeIndex - 1];
@@ -117,7 +88,7 @@ public class Game
 
 					for (i = 0; i < iterations; i++)
 					{
-						dfsGameResult = DepthFirstSearch.altDepthFirst(game.getBoardstate());
+						dfsGameResult = DepthFirstSearch.depthFirst(game.getBoardstate());
 						dfsNodesAccumulator += dfsGameResult.getNodesExpanded();
 						dfsAgentAccumulator += dfsGameResult.getAgentMoves();
 						printResult(dfsGameResult);
@@ -132,15 +103,17 @@ public class Game
 						bfsAgentAccumulator += bfsGameResult.getAgentMoves();
 						printResult(bfsGameResult);
 					}
+					break;
 
 				case ITERATIVE_DEEPENING:
 					for (i = 0; i < iterations; i++)
 					{
-						idGameResult = IterativeDeepeningSearch.altIterativeDeepening(game.getBoardstate());
+						idGameResult = IterativeDeepeningSearch.iterativeDeepening(game.getBoardstate());
 						idNodesAccumulator += idGameResult.getNodesExpanded();
 						idAgentAccumulator += idGameResult.getAgentMoves();
 						printResult(idGameResult);
 					}
+					break;
 
 				case A_STAR:
 					for (i = 0; i < iterations; i++)
@@ -154,11 +127,6 @@ public class Game
 				default:
 					break;
 			}
-
-			////			nodesAccumulator = nodesAccumulator / iterations;
-			////			agentAccumulator = agentAccumulator / iterations;
-			//			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::");
-			//			System.out.println("Average nodes expanded: " + nodesAccumulator + ", Average agent moves for solution: " + agentAccumulator);
 
 			if (csvFile)
 			{
@@ -210,7 +178,7 @@ public class Game
 
 	public BoardState getBoardstate()
 	{
-		return boardstate;
+		return startState;
 	}
 
 }

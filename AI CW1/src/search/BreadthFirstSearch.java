@@ -18,6 +18,13 @@ import game.board.BoardState;
 public class BreadthFirstSearch extends Search
 {
 
+	/**
+	 * Performs a breadth first search to find a path from the given initial state, to the goal state of the board. It
+	 * explores each depth level fully before going down a level
+	 * 
+	 * @param initBoardState
+	 * @return An object containing the solution path, number of nodes expanded, and number of moves to reach solution
+	 */
 	public static GameResult breadthFirst(BoardState initBoardState)
 	{
 		int currentLevel = 0;
@@ -36,7 +43,7 @@ public class BreadthFirstSearch extends Search
 			currentNode = fringe.remove();
 			currentBoardState = currentNode.getVal();
 			currentLevel = currentNode.getDepth();
-			
+
 			//			System.out.println(currentBoardState);
 			//			System.out.println(nodeCounter);
 
@@ -52,7 +59,7 @@ public class BreadthFirstSearch extends Search
 				{
 					nodeCounter++;
 				}
-				
+
 				ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode, currentLevel);
 				//ArrayList<Tree<BoardState>> nextMoves = convertMovesToChildTrees(searchTree, possibleMoves, visitedBoardStates);
 				ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates, fringe, currentLevel);
@@ -63,7 +70,8 @@ public class BreadthFirstSearch extends Search
 	}
 
 
-	private static ArrayList<Node> filterOutSeenStates(Node currentNode, ArrayList<Node> possibleMoves, HashSet<BoardState> visitedBoardStates, LinkedList<Node> fringe, int currentLevel)
+	private static ArrayList<Node> filterOutSeenStates(Node currentNode, ArrayList<Node> possibleMoves, HashSet<BoardState> visitedBoardStates, LinkedList<Node> fringe,
+			int currentLevel)
 	{
 		ArrayList<Node> nextMoves = currentNode.getChildren();
 		for (Node bState : possibleMoves)
@@ -87,14 +95,13 @@ public class BreadthFirstSearch extends Search
 		return nextMoves;
 	}
 
-
-//	private static ArrayList<Node> convertMovesToChildTrees(Node currentNode, ArrayList<BoardState> possibleMoves, HashSet<BoardState> visitedBoardStates)
-//	{
-//		ArrayList<Node> nextMoves = currentNode.getChildren();
-//		for (BoardState bState : possibleMoves)
-//		{
-//			nextMoves.add(new Node(bState, currentNode, new ArrayList<Node>()));
-//		}
-//		return nextMoves;
-//	}
+	//	private static ArrayList<Node> convertMovesToChildTrees(Node currentNode, ArrayList<BoardState> possibleMoves, HashSet<BoardState> visitedBoardStates)
+	//	{
+	//		ArrayList<Node> nextMoves = currentNode.getChildren();
+	//		for (BoardState bState : possibleMoves)
+	//		{
+	//			nextMoves.add(new Node(bState, currentNode, new ArrayList<Node>()));
+	//		}
+	//		return nextMoves;
+	//	}
 }

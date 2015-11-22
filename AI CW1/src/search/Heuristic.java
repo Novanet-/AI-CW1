@@ -18,14 +18,14 @@ public class Heuristic
 
 	private static HashMap<Node, Integer>	gScore;
 	private static HashMap<Node, Integer>	fScore;
-	private static Integer								gScoreDefault	= Integer.MAX_VALUE;
-	private static Integer								fScoreDefault	= Integer.MAX_VALUE;
+	private static Integer					gScoreDefault	= Integer.MAX_VALUE;
+	private static Integer					fScoreDefault	= Integer.MAX_VALUE;
 
 
 	/**
 	 * Finds a solution to the initial board start by applying a heuristic to each neighbour of the node being explored
 	 * (h(n) = g(n) + f(n)) where g(n) is the cost from the start board state to the current board state, and f(n) is
-	 * the estimated cost of getting from the current board state toa goal state. Once this heuristic has been
+	 * the estimated cost of getting from the current board state to a goal state. Once this heuristic has been
 	 * calculated for each neighbour, they are all added the the fringe. The search decides the next node from the
 	 * fringe to explore by picking the one with the lowest value for its's heuristic
 	 * 
@@ -36,19 +36,18 @@ public class Heuristic
 	 */
 	public static GameResult heuristic(BoardState initBoardState)
 	{
-		int nodeCounter = 0;
 		int currentDepth = 0;
 
 		EstimatedCostComparator comparator = new Heuristic.EstimatedCostComparator();
 
-		HashSet<Node> nodesExplored = new HashSet<Node>(); // The set of nodes already explored
-		PriorityQueue<Node> fringe = new PriorityQueue<Node>(comparator); //The potential neigbours to be explored
+		HashSet<Node> visitedBoardStates = new HashSet<Node>(); //Already seen nodes
+		PriorityQueue<Node> fringe = new PriorityQueue<Node>(comparator); //The potential children to be explored
 
 		Node rootNode = new Node(initBoardState, null, new ArrayList<Node>(), 0);
-		fringe.add(rootNode);// The set of tentative nodes to be evaluated, initially containing the start node
+		fringe.add(rootNode);// The The set of children to be explored, starting with the root node
 
 		gScore = new HashMap<Node, Integer>();
-		gScore.put(rootNode, 0); // Cost from start along best known path.
+		gScore.put(rootNode, 0); // Cost from start along best path that is known
 
 		fScore = new HashMap<Node, Integer>();
 		fScore.put(rootNode, gScore.get(rootNode) + estimateCostToGoal(rootNode)); //Estimated cost from the root node to a goal state
@@ -56,50 +55,34 @@ public class Heuristic
 		while (!(fringe.isEmpty()))
 		{
 			Node currentNode = fringe.peek();
-			
+
 			currentDepth = currentNode.getDepth();
 			if (currentNode.getVal().isGoalState())
 			{
 				Stack<BoardState> solutionPath = Search.calculateSolutionPath(currentNode);
-				return new GameResult(true, solutionPath, nodesExplored.size(), solutionPath.size());
+				return new GameResult(true, solutionPath, visitedBoardStates.size(), solutionPath.size());
 			}
-			
-			
 
 			currentNode = fringe.remove();
-			
-			System.out.println(currentNode.getVal());
-			
-			if (nodesExplored.add(currentNode))
-			{
-				nodeCounter++;
-			}
-			
+
+			visitedBoardStates.add(currentNode);
+
 			ArrayList<Node> possibleMoves = currentNode.getVal().generatePossibleMoves(currentNode, currentDepth);
 			currentNode.setChildren(new ArrayList<Node>(possibleMoves));
 
 			for (Node childNode : currentNode.getChildren())
 			{
-				if (nodesExplored.contains(childNode))
+				if (visitedBoardStates.contains(childNode))
 				{
 					break; // Ignore neighbours which are already explored
 				}
 				Integer tentativeGScore = (gScore.get(currentNode) == null ? gScoreDefault : gScore.get(currentNode)) + 1;// Length of the path from the root node to the current node
-//				Integer childNodeGScore = gScore.get(childNode) == null ? gScoreDefault : gScore.get(childNode); //Length of the path from the root node to the child node
-				if (!(fringe.contains(childNode)))// Discover a new node
+				if (!(fringe.contains(childNode)))
 				{
-					fringe.add(childNode);
+					fringe.add(childNode); // Discover a new node
 				}
-//				else if (tentativeGScore >= childNodeGScore)
-//				{
-//					break; // This is not a better path.
-//				}
-
-				// Record the current path selected
 				gScore.put(childNode, tentativeGScore);
 				fScore.put(childNode, gScore.get(childNode) + estimateCostToGoal(childNode));
-				System.out.println(tentativeGScore);
-				System.out.println(gScore.get(childNode) + estimateCostToGoal(childNode));
 			}
 		}
 
@@ -108,22 +91,36 @@ public class Heuristic
 	}
 
 
+	/**
+	 * Uses a heuristic function (sum of manhattan distances) to generate an estimated cost from the current state to
+	 * the goal state
+	 * 
+	 * @param rootNode
+	 * @return
+	 */
 	private static Integer estimateCostToGoal(Node rootNode)
 	{
 		int cost = 0;
-
 
 		ArrayList<Block> currentBlockConfig = rootNode.getVal().getBlocks();
 		ArrayList<Block> targetBlockConfig = Game.goalState.getBlocks();
 		for (int i = 0; i < currentBlockConfig.size(); i++)
 		{
-			cost += manhattanDistance(currentBlockConfig.get(i), targetBlockConfig.get(i)); 
+			cost += manhattanDistance(currentBlockConfig.get(i), targetBlockConfig.get(i));
 		}
-		
 
 		return cost;
 	}
 
+
+	/**
+	 * Calculates the difference between two positions into x and y components, then adds the x and y components to get
+	 * the manhattan distance between the two position
+	 * 
+	 * @param currentPiece
+	 * @param targetPiece
+	 * @return The manhattan distance between the two parameters
+	 */
 	private static int manhattanDistance(BoardPiece currentPiece, BoardPiece targetPiece)
 	{
 		int xDistance = Math.abs(currentPiece.getPosition().x() - targetPiece.getPosition().x());
@@ -131,6 +128,11 @@ public class Heuristic
 		return xDistance + yDistance;
 	}
 
+
+	/**
+	 * A comparator for the fringe so that it orders them where the node with the lowest fScore is at the head of the queue
+	 *
+	 */
 	static class EstimatedCostComparator implements Comparator<Node>
 	{
 

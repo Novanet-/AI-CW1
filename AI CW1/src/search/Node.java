@@ -52,7 +52,6 @@ public class Node
 	}
 
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -75,10 +74,6 @@ public class Node
 			treesEqual = false;
 		}
 
-		//		if (!(this.getChildren().equals(((Tree<T>) obj).getChildren())))
-		//		{
-		//			treesEqual = false;
-		//		}
 
 		for (Node c1 : this.getChildren())
 		{
@@ -114,14 +109,6 @@ public class Node
 	public int hashCode()
 	{
 		int hash = 3;
-		//		hash = 37 * hash + (this.getVal().hashCode());
-		//		hash = 37 * hash + (this.getParent() == null ? 0 : this.getParent().getVal().hashCode());
-		//		for (Node c : this.getChildren())
-		//		{
-		//			hash = (37 * hash + (c.getVal().hashCode()));
-		//
-		//		}
-		//		return hash;
 		hash = 17 * hash + this.getVal().hashCode();
 		hash = 17 * hash + this.getDepth();
 		return hash;

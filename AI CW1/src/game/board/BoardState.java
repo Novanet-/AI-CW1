@@ -56,7 +56,6 @@ public class BoardState
 		}
 
 		return equalBoardState;
-		//		return this.toString().equals(((BoardState) obj).toString());
 	}
 
 
@@ -199,43 +198,10 @@ public class BoardState
 	 */
 	public boolean isGoalState()
 	{
-		//		Block lastBlock = this.getBlocks().get(getBlocks().size() - 1);
-		//		if (blockOnTable(lastBlock))
-		//		{
-		//
-		//			for (int i = this.getBlocks().size() - 2; i >= 0; i--)
-		//			{
-		//				Block smallerBlock = getBlocks().get(i);
-		//				if ((smallerBlock.getPosition().x() == (lastBlock.getPosition().x() - 1)) && (smallerBlock.getPosition().y() == lastBlock.getPosition().y()))
-		//				{
-		//					lastBlock = smallerBlock;
-		//				}
-		//				else
-		//				{
-		//					return false;
-		//				}
-		//
-		//			}
-		//			return true;
-		//		}
-		//		return false;
 		if (this.equals(Game.goalState))
 			return true;
 		else
 			return false;
-	}
-
-
-	/**
-	 * Checks that the block is on the bottom row of the grid
-	 * 
-	 * @param block
-	 *            The heaviest block in the block array
-	 * @return true if block is on the bottom row, otherwise false
-	 */
-	private boolean blockOnTable(Block lastBlock)
-	{
-		return lastBlock.getPosition().x().equals((int) this.getBoard().getHeight() - 1);
 	}
 
 

@@ -18,7 +18,6 @@ public class NoSolutionPossibleException extends Exception
 	public NoSolutionPossibleException()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -31,7 +30,6 @@ public class NoSolutionPossibleException extends Exception
 	public NoSolutionPossibleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
 	{
 		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -42,7 +40,6 @@ public class NoSolutionPossibleException extends Exception
 	public NoSolutionPossibleException(String message, Throwable cause)
 	{
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -52,7 +49,6 @@ public class NoSolutionPossibleException extends Exception
 	public NoSolutionPossibleException(String message)
 	{
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -62,7 +58,6 @@ public class NoSolutionPossibleException extends Exception
 	public NoSolutionPossibleException(Throwable cause)
 	{
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 
 }
