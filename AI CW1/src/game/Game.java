@@ -19,7 +19,6 @@ import search.BreadthFirstSearch;
 import search.DepthFirstSearch;
 import search.Heuristic;
 import search.IterativeDeepeningSearch;
-import search.NoSolutionPossibleException;
 import search.SearchType;
 import utilities.Pair;
 

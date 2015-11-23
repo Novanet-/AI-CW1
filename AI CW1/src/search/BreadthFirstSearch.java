@@ -44,9 +44,6 @@ public class BreadthFirstSearch extends Search
 			currentBoardState = currentNode.getVal();
 			currentLevel = currentNode.getDepth();
 
-			//			System.out.println(currentBoardState);
-			//			System.out.println(nodeCounter);
-
 			if (currentBoardState.isGoalState())
 			{
 				goalStateFound = true;
@@ -61,7 +58,6 @@ public class BreadthFirstSearch extends Search
 				}
 
 				ArrayList<Node> possibleMoves = currentBoardState.generatePossibleMoves(currentNode, currentLevel);
-				//ArrayList<Tree<BoardState>> nextMoves = convertMovesToChildTrees(searchTree, possibleMoves, visitedBoardStates);
 				ArrayList<Node> nextMoves = filterOutSeenStates(currentNode, possibleMoves, visitedBoardStates, fringe, currentLevel);
 				fringe.addAll(nextMoves);
 			}
@@ -94,14 +90,4 @@ public class BreadthFirstSearch extends Search
 		}
 		return nextMoves;
 	}
-
-	//	private static ArrayList<Node> convertMovesToChildTrees(Node currentNode, ArrayList<BoardState> possibleMoves, HashSet<BoardState> visitedBoardStates)
-	//	{
-	//		ArrayList<Node> nextMoves = currentNode.getChildren();
-	//		for (BoardState bState : possibleMoves)
-	//		{
-	//			nextMoves.add(new Node(bState, currentNode, new ArrayList<Node>()));
-	//		}
-	//		return nextMoves;
-	//	}
 }
